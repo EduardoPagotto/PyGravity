@@ -6,6 +6,7 @@ Created on 21 de set de 2016
 
 from Body import Body
 from Body import Vec3
+from Body import Color
 from Universe import Universe
 
 from time import sleep
@@ -21,18 +22,41 @@ class Gravitacao(object):
         for indiceA in range(0, tot):
             corpoA = self.universo.listBody[indiceA]
 
+            if corpoA.enable == False:
+                continue
+
             for indiceB in range(0, tot):
                 corpoB = self.universo.listBody[indiceB]
+
+                if corpoB.enable == False:
+                    continue
+                
                 if indiceA != indiceB:
                     corpoA.calcNeighborAcc(corpoB)
-            
-            corpoA.accelerateAcc(self.time)
+                    #impacto de corpos 
+                    if corpoA.near(corpoB, 1.0):
+                        #calcula a forca
+                        forcaA = corpoA.calcForce()
+                        forcaB = corpoB.calcForce()
+                        #remove o corpo de menor massa
+                        if corpoA.massa >= corpoB.massa:
+                            corpoA.massa += corpoB.massa
+                            corpoA.impact(forcaB)
+                            corpoB.enable = False
+                            #self.universo.listBody.remove(corpoB)
+                        else:
+                            corpoB.impact(forcaA)
+                            corpoB.massa += corpoA.massa
+                            corpoA.enable = False
+                            #self.universo.listBody.remove(corpoA)
+
+                corpoA.accelerateAcc(self.time)
 
 if __name__ == '__main__':
     
     universo = Universe(Vec3(100.0, 100.0, 100.0))
-    universo.listBody.append( Body('c1', 10000.0, Vec3(10.0, 10.0, 0.0)))
-    universo.listBody.append( Body('c2', 10000.0, Vec3(0.0, 0.0, 0.0)))
+    universo.listBody.append( Body('c1', 10000.0, Color(), Vec3(10.0, 10.0, 0.0)))
+    universo.listBody.append( Body('c2', 10000.0, Color(), Vec3(0.0, 0.0, 0.0)))
     # universo.listBody.append( Body('c3', 10000.0, vec3(10.0, 20.0, 10.0)))
     # universo.listBody.append( Body('c4', 10000.0, vec3(10.0, 5.0, 10.0)))
     # universo.listBody.append( Body('c4', 10000.0, vec3(-10.0, -10.0, -10.0)))
