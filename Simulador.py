@@ -3,8 +3,9 @@ Created on 21 de set de 2016
 
 @author: pagotto
 '''
+from Body import Color
+from Body import Vec3
 from Body import Body
-from Body import vec3
 from Universe import Universe
 from Gravitacao import Gravitacao
 
@@ -17,7 +18,7 @@ from OpenGL.GL import *
 import sys
 
 name = 'ball_glut'
-universo = Universe(vec3(100.0, 100.0, 100.0))
+universo = Universe(Vec3(100.0, 100.0, 100.0))
 grav = Gravitacao(universo)
 
 def main():
@@ -54,9 +55,6 @@ def main():
 def display():
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
     glPushMatrix()
-    #color = [1.0,0.,0.,1.]
-    #glMaterialfv(GL_FRONT,GL_DIFFUSE,color)
-    #glutSolidSphere(1,10,10)
     desenhaCorpos()
     glPopMatrix()
     glutSwapBuffers()
@@ -73,43 +71,26 @@ def desenhaCorpos():
 def posiciona(indice):
     glPushMatrix()
     corpo = universo.listBody[indice]
-    glColor( corpo.cor.x, corpo.cor.y, corpo.cor.z)
+    color = [corpo.cor.red, corpo.cor.green, corpo.cor.blue, corpo.cor.alpha] 
+    #color = [1.0,0.,0.,1.]
+    glMaterialfv(GL_FRONT,GL_DIFFUSE, color)
     glTranslatef(corpo.posicao.x, corpo.posicao.y, corpo.posicao.z)
     #print('{0}'.format( corpo ))
     glutSolidSphere(2,10,10)
     glPopMatrix()
     
 if __name__ == '__main__':
-     
-    universo.listBody.append( Body('c1', 5000.0, vec3(10.0, 0.0, 0.0), vec3(0.0, 0.05, 0.0)))
-    universo.listBody.append( Body('c2', 155000.0, vec3(0.0, 0.0, 0.0)))
-    universo.listBody.append( Body('c3', 100.0, vec3(70.0, 70.0, 0.0))) 
-    universo.listBody.append( Body('c4', 100.0, vec3(-70.0, -70.0, 0.0), vec3(0.003, 0.0, 0.0))) 
-    universo.listBody.append( Body('c5', 10.0, vec3(70.0, -70.0, 0.0), vec3(0.0, 0.0, 0.0)))
-    universo.listBody.append( Body('c6', 1.0, vec3(-50.0, 70.0, 0.0), vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c7', 1.0, vec3(-70.0, 50.0, 0.0), vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c8', 3.0, vec3(-70.0, 20.0, 0.0), vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c9', 1.0, vec3(-79.0, 70.0, 0.0), vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c10', 5.0, vec3(-70.0, 70.0, 0.0), vec3(0.0, 0.0, 0.0))) 
+
+    universo.listBody.append( Body('c1', 10.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c2', 10.0, Color.BLUE(), Vec3(-70.0, 50.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c3', 10.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c4', 50.0, Color.RED(), Vec3(-70.0, 20.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c5', 50.0, Color.RED(), Vec3(-70.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c6', 50.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, 0.0, 0.0)))     
+    universo.listBody.append( Body('c7', 200.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
+    universo.listBody.append( Body('c8', 200.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.003, 0.0, 0.0))) 
+    universo.listBody.append( Body('c9', 5000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.06, 0.0)))
+    universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(0.0, 0.0, 0.0)))
+
 
     main()
-
-    #universo = Universe(vec3(100.0, 100.0, 100.0))
-    #universo.listBody.append( Body('c1', 10000.0, vec3(5.0, 5.0, 0.0)))
-    
-    # universo.listBody.append( Body('c3', 10000.0, vec3(10.0, 20.0, 10.0)))
-    # universo.listBody.append( Body('c4', 10000.0, vec3(10.0, 5.0, 10.0)))
-    # universo.listBody.append( Body('c4', 10000.0, vec3(-10.0, -10.0, -10.0)))
-
-    #grav = Gravitacao(universo)
-    # tot = len(universo.listBody)
-
-    # while True:
-    #     for indice in range(0, tot):
-    #         print('{0}'.format( universo.listBody[indice] ))
-
-    #     grav.step()
-
-    #     sleep(0.1)
-    #     print('-------------------')
-    #     sys.stdout.flush()
