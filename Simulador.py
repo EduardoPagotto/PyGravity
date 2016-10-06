@@ -91,7 +91,7 @@ if __name__ == '__main__':
     universo.listBody.append( Body('c6', 50.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, 0.0, 0.0)))     
     universo.listBody.append( Body('c7', 200.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
     universo.listBody.append( Body('c8', 200.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.003, 0.0, 0.0))) 
-    universo.listBody.append( Body('c9', 5000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.0, 0.0)))
+    universo.listBody.append( Body('c9', 5000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.06, 0.0)))
     universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(0.0, 0.0, 0.0)))
 
 

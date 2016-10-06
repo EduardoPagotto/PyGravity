@@ -15,6 +15,15 @@ class Universe(object):
     def __str__(self):
         return str('Tamanho:{0} Corpos:{1}' .format(self.tamanho, len(self.listBody)))
 
+    def isInside(self, posicao):
+        
+        if ((posicao.x > self.tamanho.x) or 
+            (posicao.y > self.tamanho.y) or
+            (posicao.z > self.tamanho.z)):
+            return False
+        
+        return True
+
 if __name__ == '__main__':
     universo = Universe(Vec3(100.0, 100.0, 100.0))
 

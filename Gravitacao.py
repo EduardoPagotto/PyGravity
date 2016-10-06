@@ -51,6 +51,9 @@ class Gravitacao(object):
                             #self.universo.listBody.remove(corpoA)
 
                 corpoA.accelerateAcc(self.time)
+                
+                if self.universo.isInside(corpoA.posicao) != True:
+                    corpoA.enable = False
 
 if __name__ == '__main__':
     
