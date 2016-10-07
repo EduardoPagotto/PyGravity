@@ -65,7 +65,7 @@ class Gravitacao(object):
 
 if __name__ == '__main__':
     
-    universo = Universe(Vec3(100.0, 100.0, 100.0))
+    universo = Universe(100.0)
     universo.listBody.append( Body('c1', 10000.0, Color(), Vec3(10.0, 10.0, 0.0)))
     universo.listBody.append( Body('c2', 10000.0, Color(), Vec3(0.0, 0.0, 0.0)))
     # universo.listBody.append( Body('c3', 10000.0, vec3(10.0, 20.0, 10.0)))

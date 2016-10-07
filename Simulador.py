@@ -18,7 +18,7 @@ from OpenGL.GL import *
 import sys
 
 name = 'Gravitacao N-to-N'
-universo = Universe(Vec3(100.0, 100.0, 100.0))
+universo = Universe(100.0)
 grav = Gravitacao(universo)
 
 def main():

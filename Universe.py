@@ -16,16 +16,14 @@ class Universe(object):
         return str('Tamanho:{0} Corpos:{1}' .format(self.tamanho, len(self.listBody)))
 
     def isInside(self, posicao):
-        
-        if ((posicao.x > self.tamanho.x) or 
-            (posicao.y > self.tamanho.y) or
-            (posicao.z > self.tamanho.z)):
-            return False
-        
-        return True
+        distancia = posicao.amplitude()
+        if distancia <= self.tamanho:
+            return True
+
+        return False
 
 if __name__ == '__main__':
-    universo = Universe(Vec3(100.0, 100.0, 100.0))
+    universo = Universe(100.0)
 
     universo.listBody.append( Body('c1', 100.0, Vec3(10.0, 10.0, 10.0)))
     universo.listBody.append( Body('c2', 100.0, Vec3(20.0, 10.0, -10.0)))
