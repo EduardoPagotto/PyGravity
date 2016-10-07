@@ -55,7 +55,6 @@ class Body(object):
         
         return False
 
-
     # def calcNeighbor(self, neighbor):
     #     distance = self.posicao.distance(neighbor.posicao)
     #     escalarForce = 6.67e-11 * self.massa * neighbor.massa / math.pow(distance,2)
@@ -75,7 +74,6 @@ class Body(object):
     #                         self.posicao.z + self.velocidade.z)
     #     self.lastTime = time;
             
-
 if __name__ == '__main__':
 
     body1 = Body('corpo1', 1000.0)

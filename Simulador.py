@@ -17,7 +17,7 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 import sys
 
-name = 'ball_glut'
+name = 'Gravitacao N-to-N'
 universo = Universe(Vec3(100.0, 100.0, 100.0))
 grav = Gravitacao(universo)
 
@@ -58,9 +58,7 @@ def display():
     desenhaCorpos()
     glPopMatrix()
     glutSwapBuffers()
-
     grav.step()
-
     return
 
 def desenhaCorpos():    
@@ -74,7 +72,6 @@ def posiciona(indice):
     if corpo.enable == True:
         glPushMatrix()
         color = [corpo.cor.red, corpo.cor.green, corpo.cor.blue, corpo.cor.alpha] 
-        #color = [1.0,0.,0.,1.]
         glMaterialfv(GL_FRONT,GL_DIFFUSE, color)
         glTranslatef(corpo.posicao.x, corpo.posicao.y, corpo.posicao.z)
         #print('{0}'.format( corpo ))
@@ -83,7 +80,7 @@ def posiciona(indice):
     
 if __name__ == '__main__':
 
-    universo.listBody.append( Body('c1', 10.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c1', 10.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, -0.005, 0.0))) 
     universo.listBody.append( Body('c2', 10.0, Color.BLUE(), Vec3(-70.0, 50.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
     universo.listBody.append( Body('c3', 10.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
     universo.listBody.append( Body('c4', 50.0, Color.RED(), Vec3(-70.0, 20.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
@@ -91,8 +88,7 @@ if __name__ == '__main__':
     universo.listBody.append( Body('c6', 50.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, 0.0, 0.0)))     
     universo.listBody.append( Body('c7', 200.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
     universo.listBody.append( Body('c8', 200.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.003, 0.0, 0.0))) 
-    universo.listBody.append( Body('c9', 5000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.06, 0.0)))
+    universo.listBody.append( Body('c9', 5000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.015, 0.0)))
     universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(0.0, 0.0, 0.0)))
-
 
     main()
