@@ -18,7 +18,7 @@ from OpenGL.GL import *
 import sys
 
 name = 'Gravitacao N-to-N'
-universo = Universe(100.0)
+universo = Universe(300.0)
 grav = Gravitacao(universo)
 
 def main():
@@ -80,15 +80,14 @@ def posiciona(indice):
     
 if __name__ == '__main__':
 
-    universo.listBody.append( Body('c1', 10.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, -0.005, 0.0))) 
-    universo.listBody.append( Body('c2', 10.0, Color.BLUE(), Vec3(-70.0, 50.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c3', 10.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c4', 50.0, Color.RED(), Vec3(-70.0, 20.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c5', 50.0, Color.RED(), Vec3(-70.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c6', 50.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, 0.0, 0.0)))     
-    universo.listBody.append( Body('c7', 200.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
-    universo.listBody.append( Body('c8', 200.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.003, 0.0, 0.0))) 
-    universo.listBody.append( Body('c9', 5000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.015, 0.0)))
-    universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(0.0, 0.0, 0.0)))
+    universo.listBody.append( Body('c1', 20.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, -0.01, 0.0))) 
+    universo.listBody.append( Body('c3', 20.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c4', 100.0, Color.RED(), Vec3(-70.0, -20.0, 0.0), Vec3(0.0, 0.01, 0.0))) 
+    universo.listBody.append( Body('c6', 100.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, 0.01, 0.0)))     
+    universo.listBody.append( Body('c7', 300.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
+    universo.listBody.append( Body('c8', 300.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.003, 0.0, 0.0))) 
+    universo.listBody.append( Body('c9', 10000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.05, 0.0)))
+    universo.listBody.append( Body('c9', 10000.0, Color.YELLOW(), Vec3(70.0, -90.0, 0.0), Vec3(0.0, 0.0, 0.0)))
+    universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(0.0, 0.0, 0.0), Vec3(0.0, -0.001, 0.0)))
 
     main()

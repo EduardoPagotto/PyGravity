@@ -56,12 +56,12 @@ class Gravitacao(object):
                     #impacto de corpos
                     self.processaColisao(corpoA, corpoB)
 
-                #executa a somatoria das forcas visinha e zera acumulador de forca
-                corpoA.accelerateAcc(self.time)
-                
-                #verifica se corpo ainda esta no limite do universo
-                if self.universo.isInside(corpoA.posicao) != True:
-                    corpoA.enable = False
+            #executa a somatoria das forcas visinha e zera acumulador de forca
+            corpoA.accelerateAcc(self.time)
+            
+            #verifica se corpo ainda esta no limite do universo
+            if self.universo.isInside(corpoA.posicao) != True:
+                corpoA.enable = False
 
 if __name__ == '__main__':
     

@@ -4,6 +4,13 @@ Created on 21 de set de 2016
 @author: pagotto
 '''
 import math
+from ctypes import *
+
+class POINTS(Structure):
+    _fields_ = [('x', c_double), 
+                ('y', c_double), 
+                ('z', c_double)] 
+
 
 class Vec3(object):
     def __init__(self, x=0.0, y=0.0, z=0.0):
