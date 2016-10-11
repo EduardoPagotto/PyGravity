@@ -14,6 +14,7 @@ class POINTS(Structure):
 
 class Vec3(object):
     def __init__(self, x=0.0, y=0.0, z=0.0):
+        '''Inicializa Vetor com 0.0 0.0 0.0'''
         self.x = x
         self.y = y
         self.z = z
@@ -22,58 +23,67 @@ class Vec3(object):
         return str('{valx},{valy},{valz}'.format(valx = self.x, valy = self.y, valz = self.z))
 
     def __add__(self, other):
+        '''Soma vetorial: v1 = v2 + v3'''
         x = self.x + other.x
         y = self.y + other.y
         z = self.z + other.z
         return Vec3(x,y,z)
 
     def __sub__(self, other):
+        '''Subitacao vetorial: v1 = v2 - v3'''
         x = self.x - other.x
         y = self.y - other.y
         z = self.z - other.z
         return Vec3(x,y,z)
 
     def __mul__(self, escalar):
+        '''Produto Vetorial, vetor multiplicado pelo escalar: v1 = v2 * real'''
         return Vec3(self.x * escalar,
             self.y * escalar,
             self.z * escalar)
 
     def __truediv__(self, escalar):
+        '''Divisao de vetor por escalar v1 = v2 / real'''
         return Vec3(self.x / escalar,
                     self.y / escalar,
                     self.z / escalar)
-
-    def divisor(self, escalar):
-        return Vec3(self.x / escalar,
-                    self.y / escalar,
-                    self.z / escalar)
-
-
-    def distance(self, posicao):
-        return math.sqrt( math.pow( ( self.x - posicao.x ),2 ) + math.pow( ( self.y - posicao.y ),2 ) + math.pow( ( self.z - posicao.z ),2 ))
-
-    def add(self, other):
+    
+    def __iadd__(self, other):
+        '''Acumula vetor: v1 += v2'''
         self.x += other.x
         self.y += other.y
         self.z += other.z
+        return Vec3(self.x, self.y, self.z)
 
-    def sub(self, other):
+    def __isub__(self, other):
+        '''Subrai acumulado v1 -= v2'''
         self.x -= other.x
         self.y -= other.y
         self.z -= other.z
-
-    # def prod(self, escalar):
-    #      return Vec3(self.x * escalar,
-    #                     self.y * escalar,
-    #                     self.z * escalar)
+        return Vec3(self.x, self.y, self.z)
+        
+    def distance(self, posicao):
+        '''Distancia com a posicao'''
+        return math.sqrt( math.pow( ( self.x - posicao.x ),2 ) + math.pow( ( self.y - posicao.y ),2 ) + math.pow( ( self.z - posicao.z ),2 ))
     
-    def amplitude(self):
+    def module(self):
+        ''' Magnitude/comprimento do vetor '''
         amp = lambda vx, vy, vz :(vx ** 2 + vy **2 + vz ** 2) ** .5
         return amp(self.x, self.y, self.z)
 
+    def versor(self):
+        '''vetor com modulo tamanho igual a 1.0.'''
+        modulo = self.module()
+        return Vec3( self.x / modulo, self.y / modulo, self.z / modulo )
+
 if __name__ == '__main__':
     
-    vec = Vec3(3.0, 4.0, 5.0)
-    print('Vec:{0}'.format(vec))
-    val = vec.amplitude()
-    print('Amplitude:{0}'.format(val))
+    vec1 = Vec3(2.0, 3.0, 4.0)
+    vec2 = Vec3(5.0, 5.0, 5.0)
+
+    vec2 -= vec1
+
+    print('Vec:{0}'.format(vec2))
+    val = vec2.module()
+    print('Modulo:{0}'.format(val))
+    #print('Versor:{0}'.format(vec2.versor())

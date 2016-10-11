@@ -16,7 +16,7 @@ class Universe(object):
         return str('Tamanho:{0} Corpos:{1}' .format(self.tamanho, len(self.listBody)))
 
     def isInside(self, posicao):
-        distancia = posicao.amplitude()
+        distancia = posicao.module()
         if distancia <= self.tamanho:
             return True
 

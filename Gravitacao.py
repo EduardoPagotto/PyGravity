@@ -15,7 +15,7 @@ import sys
 class Gravitacao(object):
     def __init__(self, universo):
         self.universo = universo
-        self.time = 21500
+        self.ticktack = 21500
 
     def processaColisao(self, corpoA, corpoB):
         #impacto de corpos 
@@ -24,8 +24,8 @@ class Gravitacao(object):
             forcaA = corpoA.calcForce()
             forcaB = corpoB.calcForce()
 
-            amplitudeForcaA = forcaA.amplitude()
-            amplitudeForcaB = forcaB.amplitude()
+            amplitudeForcaA = forcaA.module()
+            amplitudeForcaB = forcaB.module()
             forcaResultante = Vec3()
 
             if amplitudeForcaA > amplitudeForcaB:
@@ -65,7 +65,7 @@ class Gravitacao(object):
                     corpoA.calcNeighborAcc(corpoB)
 
             #executa a somatoria das forcas visinha e zera acumulador de forca
-            corpoA.accelerateAcc(self.time)
+            corpoA.accelerateAcc(self.ticktack)
 
     def colisao(self, numeroCorpos):
         for indiceA in range(0, numeroCorpos):

@@ -23,28 +23,30 @@ class Body(object):
         return str('Nome:{0}, Massa:{1} Pos:{2} Vel:{3}' .format(self.nome, self.massa, self.posicao, self.velocidade))
 
     def calcNeighborAcc(self, neighbor):
+        #Distancia entre G e g
         distance = self.posicao.distance(neighbor.posicao)
-        escalarForce = 6.67e-11 * self.massa * neighbor.massa / math.pow(distance,2)
-        self.accForce.add( Vec3((escalarForce * ( neighbor.posicao.x - self.posicao.x ) / distance), 
-                                (escalarForce * ( neighbor.posicao.y - self.posicao.y ) / distance),
-                                (escalarForce * ( neighbor.posicao.z - self.posicao.z ) / distance)))
 
-    def accelerateAcc(self, time):
-        self.aceleracao = Vec3(self.accForce.x / self.massa, 
-                                self.accForce.y / self.massa, 
-                                self.accForce.z / self.massa)
-        self.velocidade = Vec3(self.velocidade.x + self.aceleracao.x * time, 
-                                self.velocidade.y + self.aceleracao.y * time, 
-                                self.velocidade.z + self.aceleracao.z * time)
-        self.posicao = Vec3(self.posicao.x + self.velocidade.x, 
-                            self.posicao.y + self.velocidade.y, 
-                            self.posicao.z + self.velocidade.z)
-        self.lastTime = time;
+        #calculo da forca escalar Fg = G (M1 * M2 / d **2)
+        escalarForce = 6.67e-11 * ((self.massa * neighbor.massa) / math.pow(distance,2))
+
+        #proporcao (Regra de 3), da forca em cada eixo
+        self.accForce += (( neighbor.posicao - self.posicao) * escalarForce ) / distance 
+
+    def accelerateAcc(self, ticktackCount):
+        
+        self.aceleracao = self.accForce / self.massa # a = F / m
+        self.velocidade += (self.aceleracao * ticktackCount)  # V = Vo * at
+        self.posicao += self.velocidade              # S = So + V
+        self.lastTime = ticktackCount;
         self.accForce = Vec3()
 
     def impact(self, force):
-        self.accForce = Vec3()
-        self.accForce.add(force)
+        self.accForce = force
+        # self.aceleracao = force / self.massa # a = F / m
+        # self.velocidade += self.aceleracao  # V = Vo * at
+        # self.posicao += self.velocidade              # S = So + V
+        # self.lastTime = time;
+        # self.accForce = Vec3()
 
     def calcForce(self):
         return self.aceleracao * self.massa
@@ -55,25 +57,6 @@ class Body(object):
             return True
         
         return False
-
-    # def calcNeighbor(self, neighbor):
-    #     distance = self.posicao.distance(neighbor.posicao)
-    #     escalarForce = 6.67e-11 * self.massa * neighbor.massa / math.pow(distance,2)
-    #     return Vec3((escalarForce * ( neighbor.posicao.x - self.posicao.x ) / distance), 
-    #                  (escalarForce * ( neighbor.posicao.y - self.posicao.y ) / distance),
-    #                  (escalarForce * ( neighbor.posicao.z - self.posicao.z ) / distance))
-
-    # def accelerate(self, force, time):
-    #     self.aceleracao = Vec3(force.x / self.massa,
-    #                             force.y / self.massa,
-    #                             force.z / self.massa)
-    #     self.velocidade = Vec3(self.velocidade.x + self.aceleracao.x * time, 
-    #                             self.velocidade.y + self.aceleracao.y * time, 
-    #                             self.velocidade.z + self.aceleracao.z * time)
-    #     self.posicao = Vec3(self.posicao.x + self.velocidade.x, 
-    #                         self.posicao.y + self.velocidade.y, 
-    #                         self.posicao.z + self.velocidade.z)
-    #     self.lastTime = time;
             
 if __name__ == '__main__':
 
@@ -82,6 +65,3 @@ if __name__ == '__main__':
 
     print('Corpo:{0}'.format(body1))
     print('Corpo:{0}'.format(body2))
-
-    #body2.calcNeighborAcc(body1);
-    #body1.accelerate(Vec3(5.0, 5.0, 5.0), 10)
