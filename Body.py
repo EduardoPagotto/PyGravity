@@ -27,7 +27,7 @@ class Body(object):
         distance = self.posicao.distance(neighbor.posicao)
 
         #calculo da forca escalar Fg = G (M1 * M2 / d **2)
-        escalarForce = 6.67e-11 * ((self.massa * neighbor.massa) / math.pow(distance,2))
+        escalarForce = 6.67e-11 * ((self.massa * neighbor.massa) / (distance **2))
 
         #proporcao (Regra de 3), da forca em cada eixo
         self.accForce += (( neighbor.posicao - self.posicao) * escalarForce ) / distance 
@@ -45,7 +45,7 @@ class Body(object):
         # self.aceleracao = force / self.massa # a = F / m
         # self.velocidade += self.aceleracao  # V = Vo * at
         # self.posicao += self.velocidade              # S = So + V
-        # self.lastTime = time;
+        # self.lastTime = ticktackCount;
         # self.accForce = Vec3()
 
     def calcForce(self):

@@ -15,7 +15,7 @@ import sys
 class Gravitacao(object):
     def __init__(self, universo):
         self.universo = universo
-        self.ticktack = 21500
+        self.ticktack = 1000
 
     def processaColisao(self, corpoA, corpoB):
         #impacto de corpos 
@@ -36,12 +36,10 @@ class Gravitacao(object):
             #remove o corpo de menor massa
             if corpoA.massa >= corpoB.massa:
                 corpoA.massa += corpoB.massa
-                #corpoA.aceleracao = forcaResultante.divisor( corpoA.massa )
                 corpoA.impact(forcaResultante)
                 corpoB.enable = False
             else:
                 corpoB.massa += corpoA.massa
-                #corpoB.aceleracao = forcaResultante / corpoB.massa
                 corpoB.impact(forcaResultante)
                 corpoA.enable = False
 
