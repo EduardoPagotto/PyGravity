@@ -43,10 +43,11 @@ class Body(object):
         self.accForce = Vec3()
 
     def impact(self, force):
+        self.accForce = Vec3()
         self.accForce.add(force)
 
     def calcForce(self):
-        return self.aceleracao.prod(self.massa)
+        return self.aceleracao * self.massa
 
     def near(self, neighbor, minDistance):
         distance = self.posicao.distance(neighbor.posicao)

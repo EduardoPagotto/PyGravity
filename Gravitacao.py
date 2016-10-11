@@ -15,35 +15,45 @@ import sys
 class Gravitacao(object):
     def __init__(self, universo):
         self.universo = universo
-        self.time = 1500
+        self.time = 21500
 
     def processaColisao(self, corpoA, corpoB):
         #impacto de corpos 
-        if corpoA.near(corpoB, 1.0):
+        if corpoA.near(corpoB, 2.0):
+            #calcula a forca
+            forcaA = corpoA.calcForce()
+            forcaB = corpoB.calcForce()
+
+            amplitudeForcaA = forcaA.amplitude()
+            amplitudeForcaB = forcaB.amplitude()
+            forcaResultante = Vec3()
+
+            if amplitudeForcaA > amplitudeForcaB:
+                forcaResultante = forcaA - forcaB
+            else:
+                forcaResultante = forcaB - forcaA
+
             #remove o corpo de menor massa
             if corpoA.massa >= corpoB.massa:
-                #calcula a forca
-                forcaB = corpoB.calcForce()
-                #agrega massa
                 corpoA.massa += corpoB.massa
-                corpoA.impact(forcaB)
+                #corpoA.aceleracao = forcaResultante.divisor( corpoA.massa )
+                corpoA.impact(forcaResultante)
                 corpoB.enable = False
             else:
-                forcaA = corpoA.calcForce()
-                corpoB.impact(forcaA)
                 corpoB.massa += corpoA.massa
+                #corpoB.aceleracao = forcaResultante / corpoB.massa
+                corpoB.impact(forcaResultante)
                 corpoA.enable = False
-                
-    def step(self):
-        tot = len(self.universo.listBody)
-        for indiceA in range(0, tot):
+
+    def somatoriaForcas(self, numeroCorpos):
+        for indiceA in range(0, numeroCorpos):
             corpoA = self.universo.listBody[indiceA]
 
             #Se corpo esta invalido (colidiu com outro corpo ou fora do universo)
             if corpoA.enable == False:
                 continue
 
-            for indiceB in range(0, tot):
+            for indiceB in range(0, numeroCorpos):
                 corpoB = self.universo.listBody[indiceB]
 
                 #Se corpo esta invalido (colidiu com outro corpo ou fora do universo)
@@ -53,15 +63,39 @@ class Gravitacao(object):
                 if indiceA != indiceB:
                     #acumula forca dos visinhos
                     corpoA.calcNeighborAcc(corpoB)
-                    #impacto de corpos
-                    self.processaColisao(corpoA, corpoB)
 
             #executa a somatoria das forcas visinha e zera acumulador de forca
             corpoA.accelerateAcc(self.time)
+
+    def colisao(self, numeroCorpos):
+        for indiceA in range(0, numeroCorpos):
+            corpoA = self.universo.listBody[indiceA]
+
+            #Se corpo esta invalido (colidiu com outro corpo ou fora do universo)
+            if corpoA.enable == False:
+                continue
+
+            for indiceB in range(0, numeroCorpos):
+                corpoB = self.universo.listBody[indiceB]
+
+                #Se corpo esta invalido (colidiu com outro corpo ou fora do universo)
+                if corpoB.enable == False:
+                    continue
+                
+                if indiceA != indiceB:
+                    self.processaColisao(corpoA, corpoB)
             
-            #verifica se corpo ainda esta no limite do universo
             if self.universo.isInside(corpoA.posicao) != True:
                 corpoA.enable = False
+
+    def step(self):
+        tot = len(self.universo.listBody)
+
+        self.somatoriaForcas(tot)
+        self.colisao(tot)   
+        #verifica se corpo ainda esta no limite do universo
+        #if self.universo.isInside(corpoA.posicao) != True:
+        #    corpoA.enable = False
 
 if __name__ == '__main__':
     

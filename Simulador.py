@@ -79,15 +79,18 @@ def posiciona(indice):
         glPopMatrix()
     
 if __name__ == '__main__':
+    
+    #universo.listBody.append( Body('c1', 2000000.0, Color.BLUE(), Vec3(50.0, 0.0, 0.0), Vec3(0.0, 0.0, 0.0)))
+    #universo.listBody.append( Body('c1', 2000000.0, Color.BLUE(), Vec3(-50.0, 0.0, 0.0), Vec3(0.0, 0.0, 0.0)))
 
-    universo.listBody.append( Body('c1', 20.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, -0.01, 0.0))) 
-    universo.listBody.append( Body('c3', 20.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c1', 20.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, -0.05, 0.0))) 
+    universo.listBody.append( Body('c3', 20.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, -0.05, 0.0))) 
     universo.listBody.append( Body('c4', 100.0, Color.RED(), Vec3(-70.0, -20.0, 0.0), Vec3(0.0, 0.01, 0.0))) 
     universo.listBody.append( Body('c6', 100.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, 0.01, 0.0)))     
     universo.listBody.append( Body('c7', 300.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
     universo.listBody.append( Body('c8', 300.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.003, 0.0, 0.0))) 
-    universo.listBody.append( Body('c9', 10000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.05, 0.0)))
-    universo.listBody.append( Body('c9', 10000.0, Color.YELLOW(), Vec3(70.0, -90.0, 0.0), Vec3(0.0, 0.0, 0.0)))
+    universo.listBody.append( Body('c9', 80000.0, Color.YELLOW(), Vec3(10.0, 0.0, 0.0), Vec3(0.0, 0.2, 0.0)))
+    universo.listBody.append( Body('c9', 80000.0, Color.YELLOW(), Vec3(70.0, -90.0, 0.0), Vec3(0.0, 0.0, 0.0)))
     universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(0.0, 0.0, 0.0), Vec3(0.0, -0.001, 0.0)))
 
     main()
