@@ -1,16 +1,17 @@
-##!#/usr/bin/python3.5
+#!/usr/bin/env python3
 '''
-Created on 21 de set de 2016
+Created on 20160921
+Update on 20191105
+@author: Eduardo Pagotto
+ '''
 
-@author: pagotto
-'''
 import math
 from ctypes import *
 
-class POINTS(Structure):
-    _fields_ = [('x', c_double), 
-                ('y', c_double), 
-                ('z', c_double)] 
+# class POINTS(Structure):
+#     _fields_ = [('x', c_double), 
+#                 ('y', c_double), 
+#                 ('z', c_double)] 
 
 class Vec3(object):
     def __init__(self, x=0.0, y=0.0, z=0.0):

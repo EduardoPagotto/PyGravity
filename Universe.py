@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 '''
-Created on 21 de set de 2016
-
-@author: pagotto
-'''
+Created on 20160921
+Update on 20191105
+@author: Eduardo Pagotto
+ '''
 
 from Body import Body
 from Body import Vec3

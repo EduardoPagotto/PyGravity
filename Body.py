@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 '''
-Created on 21 de set de 2016
+Created on 20160921
+Update on 20191105
+@author: Eduardo Pagotto
+ '''
 
-@author: pagotto
-'''
 import math
 from Color import Color
 from Vec3 import Vec3
@@ -37,7 +39,7 @@ class Body(object):
         self.aceleracao = self.accForce / self.massa # a = F / m
         self.velocidade += (self.aceleracao * ticktackCount)  # V = Vo * at
         self.posicao += self.velocidade              # S = So + V
-        self.lastTime = ticktackCount;
+        self.lastTime = ticktackCount
         self.accForce = Vec3()
 
     def impact(self, force):
