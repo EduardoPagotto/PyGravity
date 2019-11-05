@@ -11,9 +11,10 @@ from Body import Body
 from Universe import Universe
 from Gravitacao import Gravitacao
 from time import sleep
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from OpenGL.GL import *
+
+from OpenGL.GL import *     # pylint: disable=unused-wildcard-import
+from OpenGL.GLU import *    # pylint: disable=unused-wildcard-import
+from OpenGL.GLUT import *   # pylint: disable=unused-wildcard-import
 
 def RED():
     return glm.vec4(1.0, 0.0, 0.0, 1.0)
