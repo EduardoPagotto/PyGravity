@@ -6,18 +6,17 @@ Update on 20191105
  '''
 
 import math
-from Color import Color
-from Vec3 import Vec3
-        
+import glm
+   
 class Body(object):
-    def __init__(self, nome, massa = 0.0, cor = Color(), posicao = Vec3(), velocidade= Vec3()):
+    def __init__(self, nome, massa = 0.0, cor = glm.vec4(), posicao = glm.vec3(), velocidade = glm.vec3()):
         self.nome = nome
         self.massa = massa
         self.posicao = posicao
         self.velocidade = velocidade
         self.lastTime = 0
-        self.aceleracao = Vec3()
-        self.accForce = Vec3()
+        self.aceleracao = glm.vec3()
+        self.accForce = glm.vec3()
         self.cor = cor
         self.enable = True
 
@@ -26,7 +25,7 @@ class Body(object):
 
     def calcNeighborAcc(self, neighbor):
         #Distancia entre G e g
-        distance = self.posicao.distance(neighbor.posicao)
+        distance = glm.distance(self.posicao, neighbor.posicao)
 
         #calculo da forca escalar Fg = G (M1 * M2 / d **2)
         escalarForce = 6.67e-11 * ((self.massa * neighbor.massa) / (distance **2))
@@ -40,7 +39,7 @@ class Body(object):
         self.velocidade += (self.aceleracao * ticktackCount)  # V = Vo * at
         self.posicao += self.velocidade              # S = So + V
         self.lastTime = ticktackCount
-        self.accForce = Vec3()
+        self.accForce = glm.vec3()
 
     def impact(self, force):
         self.accForce = force
@@ -54,7 +53,7 @@ class Body(object):
         return self.aceleracao * self.massa
 
     def near(self, neighbor, minDistance):
-        distance = self.posicao.distance(neighbor.posicao)
+        distance = glm.distance(self.posicao, neighbor.posicao)
         if distance < minDistance:
             return True
         
@@ -63,7 +62,7 @@ class Body(object):
 if __name__ == '__main__':
 
     body1 = Body('corpo1', 1000.0)
-    body2 = Body('corpo2', 1000.0, Color(), Vec3(1.0, 1.0, 1.0))
+    body2 = Body('corpo2', 1000.0, glm.vec4(), glm.vec3(1.0, 1.0, 1.0))
 
     print('Corpo:{0}'.format(body1))
     print('Corpo:{0}'.format(body2))

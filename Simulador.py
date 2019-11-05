@@ -5,20 +5,27 @@ Update on 20191105
 @author: Eduardo Pagotto
  '''
 
- 
-from Body import Color
-from Body import Vec3
+import sys
+import glm
 from Body import Body
 from Universe import Universe
 from Gravitacao import Gravitacao
-
 from time import sleep
-import sys
-
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
-import sys
+
+def RED():
+    return glm.vec4(1.0, 0.0, 0.0, 1.0)
+
+def GREEN():
+    return glm.vec4(0.0, 1.0, 0.0, 1.0)
+
+def BLUE():
+    return glm.vec4(0.0, 0.0, 1.0, 1.0)
+
+def YELLOW():
+    return glm.vec4(1.0, 1.0, 0.0, 1.0)
 
 name = 'Gravitacao N-to-N'
 universo = Universe(300.0)
@@ -74,7 +81,7 @@ def posiciona(indice):
     corpo = universo.listBody[indice]
     if corpo.enable == True:
         glPushMatrix()
-        color = [corpo.cor.red, corpo.cor.green, corpo.cor.blue, corpo.cor.alpha] 
+        color = [corpo.cor.r, corpo.cor.g, corpo.cor.b, corpo.cor.a] 
         glMaterialfv(GL_FRONT,GL_DIFFUSE, color)
         glTranslatef(corpo.posicao.x, corpo.posicao.y, corpo.posicao.z)
         #print('{0}'.format( corpo ))
@@ -83,19 +90,19 @@ def posiciona(indice):
     
 if __name__ == '__main__':
     
-    #universo.listBody.append( Body('c1', 200000.0, Color.RED(), Vec3(50.0, 0.0, 0.0), Vec3(0.0, 0.0, 0.0)))
-    #universo.listBody.append( Body('c1', 200000.0, Color.BLUE(), Vec3(-50.0, 0.0, 0.0), Vec3(0.0, 0.0, 0.0)))
+    #universo.listBody.append( Body('c1', 200000.0, RED(), glm.vec3(50.0, 0.0, 0.0), glm.vec3(0.0, 0.0, 0.0)))
+    #universo.listBody.append( Body('c1', 200000.0, BLUE(), glm.vec3(-50.0, 0.0, 0.0), glm.vec3(0.0, 0.0, 0.0)))
 
-    # universo.listBody.append( Body('c1', 100.0, Color.BLUE(), Vec3(-50.0, 70.0, 0.0), Vec3(0.0, -0.01, 0.0))) 
-    # universo.listBody.append( Body('c3', 100.0, Color.BLUE(), Vec3(-79.0, 70.0, 0.0), Vec3(0.0, -0.01, 0.0))) 
-    # universo.listBody.append( Body('c4', 200.0, Color.RED(), Vec3(-70.0, -20.0, 0.0), Vec3(0.0, -0.01, 0.0))) 
-    # universo.listBody.append( Body('c6', 200.0, Color.RED(), Vec3(70.0, -70.0, 0.0), Vec3(0.0, -0.01, 0.0)))     
-    # universo.listBody.append( Body('c7', 400.0, Color.GREEN(), Vec3(70.0, 70.0, 0.0))) 
-    # universo.listBody.append( Body('c8', 400.0, Color.GREEN(), Vec3(-70.0, -70.0, 0.0), Vec3(0.0, 0.0, 0.0))) 
-    universo.listBody.append( Body('c9', 8000.0, Color.YELLOW(), Vec3(-30.0, 90.0, 0.0), Vec3(0.0, 0.02, 0.0)))
-    universo.listBody.append( Body('c9', 8000.0, Color.YELLOW(), Vec3(30.0, -90.0, 0.0), Vec3(0.0, -0.025, 0.0)))
-    universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(-50.0, 90.0, 0.0), Vec3(0.0, -0.001, 0.0)))
-    universo.listBody.append( Body('ca', 200000.0, Color(), Vec3(50.0, -90.0, 0.0), Vec3(0.0, 0.001, 0.0)))
-    universo.listBody.append( Body('ca', 8000.0, Color.BLUE(), Vec3(0.0, 0.0, 0.0), Vec3(0.01, 0.0, 0.0)))
+    # universo.listBody.append( Body('c1', 100.0, Color.BLUE(), glm.vec3(-50.0, 70.0, 0.0), glm.vec3(0.0, -0.01, 0.0))) 
+    # universo.listBody.append( Body('c3', 100.0, BLUE(), glm.vec3(-79.0, 70.0, 0.0), glm.vec3(0.0, -0.01, 0.0))) 
+    # universo.listBody.append( Body('c4', 200.0, RED(), glm.vec3(-70.0, -20.0, 0.0), glm.vec3(0.0, -0.01, 0.0))) 
+    # universo.listBody.append( Body('c6', 200.0, Color.RED(), glm.vec3(70.0, -70.0, 0.0), glm.vec3(0.0, -0.01, 0.0)))     
+    # universo.listBody.append( Body('c7', 400.0, GREEN(), glm.vec3(70.0, 70.0, 0.0))) 
+    # universo.listBody.append( Body('c8', 400.0, GREEN(), glm.vec3(-70.0, -70.0, 0.0), glm.vec3(0.0, 0.0, 0.0))) 
+    universo.listBody.append( Body('c9', 8000.0, YELLOW(), glm.vec3(-30.0, 90.0, 0.0), glm.vec3(0.0, 0.02, 0.0)))
+    universo.listBody.append( Body('c9', 8000.0, YELLOW(), glm.vec3(30.0, -90.0, 0.0), glm.vec3(0.0, -0.025, 0.0)))
+    universo.listBody.append( Body('ca', 200000.0, glm.vec4(), glm.vec3(-50.0, 90.0, 0.0), glm.vec3(0.0, -0.001, 0.0)))
+    universo.listBody.append( Body('ca', 200000.0, glm.vec4(), glm.vec3(50.0, -90.0, 0.0), glm.vec3(0.0, 0.001, 0.0)))
+    universo.listBody.append( Body('ca', 8000.0, BLUE(), glm.vec3(0.0, 0.0, 0.0), glm.vec3(0.01, 0.0, 0.0)))
 
     main()

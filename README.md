@@ -1,4 +1,7 @@
-Pgm to test gravity n-to-n body's<p>
-Deps:<p>
-	- PyOpenGL, to install:<p>
-	  python3.5 -m pip install PyOpengl
+# PyGravity
+Implementacao de corpos n to n com forca gravitacional
+
+### Deps install:
+```bash 
+pip3 install PyOpengl PyGLM
+```
