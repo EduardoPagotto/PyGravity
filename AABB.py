@@ -10,17 +10,14 @@ Update on 20191105
 import glm
 
 class AABB(object):
-    def __init__(self):
-        self.min = glm.vec3()
-        self.max = glm.vec3()
-        self.size = glm.vec3()
-        self.surfaceArea = 0.0
-
-    def setMinMax(self, min, max):
+    def __init__(self, min, max):
         self.min = min
         self.max = max
         self.size = max - min # [glm.vec3] -- [Width:x; Height:y; Depth:z]
         self.surfaceArea = 2.0 * (self.size.x * self.size.y + self.size.x * self.size.z + self.size.y * self.size.z)
+
+    def __str__(self):
+        return 'MIN:{0} MAX:{1}'.format(self.min, self.max)
 
     def overlaps(self, other): 
         return (self.max.x > other.min.x and
@@ -38,25 +35,17 @@ class AABB(object):
                 other.min.z >= self.min.z and
                 other.max.z <= self.max.z)
 	
-    def merge(self, other): # TODO: Testar!!
-        aabb = AABB()
-        min = glm.min(self.min, other.min)
-        max = glm.max(self.max, other.max)
-        aabb.setMinMax(min, max)
-        return aabb
+    def merge(self, other):
+        return AABB(glm.min(self.min, other.min), glm.max(self.max, other.max))
 
     def intersection(self, other):
-        aabb = AABB()
-        min = glm.min(self.max, other.max)
-        max = glm.max(self.min, other.min)
-        aabb.setMinMax(min, max)
-        return aabb
+        return AABB(glm.min(self.max, other.max), glm.max(self.min, other.min))
 
 AABB_NULL_NODE = -1
 
 class AABBNode(object):
     def __init__(self):
-        self.aabb = AABB()
+        self.aabb = None
         #std::shared_ptr<IAABB> object;
         self.parentNodeIndex = AABB_NULL_NODE
         self.leftNodeIndex = AABB_NULL_NODE
@@ -68,8 +57,10 @@ class AABBNode(object):
 
 class AABBTree(object):
     def __init__(self, initialSize):
-        #std::map<std::shared_ptr<IAABB>, unsigned> _objectNodeIndexMap;
-        self._nodes = [] #std::vector<AABBNode> _nodes;
+
+        self._objectNodeIndexMap = []
+
+        self._nodes = [] 
         self._rootNodeIndex = AABB_NULL_NODE
         self._allocatedNodeCount = 0
         self._nextFreeNodeIndex = 0
@@ -245,18 +236,21 @@ class AABBTree(object):
         
             treeNode = self._nodes[treeNodeIndex]
 
-            # every node should be a parent
-            #assert(treeNode.leftNodeIndex != AABB_NULL_NODE && treeNode.rightNodeIndex != AABB_NULL_NODE);
-            # fix height and area
             leftNode = self._nodes[treeNode.leftNodeIndex]
             rightNode = self._nodes[treeNode.rightNodeIndex]
             treeNode.aabb = leftNode.aabb.merge(rightNode.aabb)
 
             treeNodeIndex = treeNode.parentNodeIndex
         
-	
-	# def insertObject(const std::shared_ptr<IAABB>& object):
-    #     pass
+    def insertAABB(self, aabb):
+        nodeIndex = self.allocateNode()
+        node = self._nodes[nodeIndex]
+        node.aabb = aabb
+        self.insertLeaf(nodeIndex)
+        self._objectNodeIndexMap.append((aabb, nodeIndex))
+
+
+
 
 	# def removeObject(const std::shared_ptr<IAABB>& object):
     #     pass
@@ -268,17 +262,33 @@ class AABBTree(object):
 
 if __name__ == '__main__':
 
+
     t = AABBTree(10)
-    novo = t.allocateNode()
+
+    q1 = AABB(glm.vec3(1,1,0), glm.vec3(2,2,0))
+    t.insertAABB(q1)
+
+    q2 = AABB(glm.vec3(3,3,0), glm.vec3(4,4,0))
+    t.insertAABB(q2)
+
+    q3 = AABB(glm.vec3(5,5,0), glm.vec3(6,6,0))
+    t.insertAABB(q3)
+
+    q4 = AABB(glm.vec3(-10,-10,0), glm.vec3(-5,-5,0))
+    t.insertAABB(q4)
+
+    print('fim')
+
+    # novo = t.allocateNode()
 
 
-    mundo = AABB()
-    mundo.setMinMax(glm.vec3(-10.0, -10.0, -10.0), glm.vec3(10.0, 10.0, 10.0))
-    t.updateLeaf(novo, mundo)
+    # mundo = AABB()
+    # mundo.setMinMax(glm.vec3(-10.0, -10.0, -10.0), glm.vec3(10.0, 10.0, 10.0))
+    # t.updateLeaf(novo, mundo)
 
-    novo2 = t.allocateNode()
-    t1 = AABB()
-    t1.setMinMax(glm.vec3(-30.0, -30.0, -30.0), glm.vec3(-15.0, -15.0, -15.0))
-    t.updateLeaf(novo, t1)
+    # novo2 = t.allocateNode()
+    # t1 = AABB()
+    # t1.setMinMax(glm.vec3(-30.0, -30.0, -30.0), glm.vec3(-15.0, -15.0, -15.0))
+    # t.updateLeaf(novo, t1)
 
-    print(str(t))
+    # print(str(t))
