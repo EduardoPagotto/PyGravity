@@ -47,13 +47,13 @@ class AABBNode(object):
     def __init__(self):
         self.aabb = None
         #std::shared_ptr<IAABB> object;
-        self.parentNodeIndex = AABB_NULL_NODE
-        self.leftNodeIndex = AABB_NULL_NODE
-        self.rightNodeIndex = AABB_NULL_NODE
-        self.nextNodeIndex = AABB_NULL_NODE
+        self.parent = AABB_NULL_NODE
+        self.left = AABB_NULL_NODE
+        self.right = AABB_NULL_NODE
+        self.next = AABB_NULL_NODE
 
     def isLeaf(self):
-        return self.leftNodeIndex == AABB_NULL_NODE
+        return self.left == AABB_NULL_NODE
 
 class AABBTree(object):
     def __init__(self, initialSize):
@@ -61,63 +61,63 @@ class AABBTree(object):
         self._objectNodeIndexMap = []
 
         self._nodes = [] 
-        self._rootNodeIndex = AABB_NULL_NODE
-        self._allocatedNodeCount = 0
-        self._nextFreeNodeIndex = 0
-        self._nodeCapacity = initialSize
+        self._root = AABB_NULL_NODE
+        self._allocated = 0
+        self._nextFree = 0
+        self._capacity = initialSize
         self._growthSize = initialSize
 
         for nodeIndex in range(0, initialSize):
             node = AABBNode()
-            node.nextNodeIndex = nodeIndex + 1
+            node.next = nodeIndex + 1
             self._nodes.append(node)
 
         if initialSize > 0:
-            self._nodes[initialSize-1].nextNodeIndex = AABB_NULL_NODE
+            self._nodes[initialSize-1].next = AABB_NULL_NODE
 
     def allocateNode(self):
-        if self._nextFreeNodeIndex == AABB_NULL_NODE:
-            self._nodeCapacity += self._growthSize
-            #_nodes.resize(_nodeCapacity);
-            for nodeIndex in range(self._allocatedNodeCount, self._nodeCapacity):            
+        if self._nextFree == AABB_NULL_NODE:
+            self._capacity += self._growthSize
+            #_nodes.resize(_capacity);
+            for nodeIndex in range(self._allocated, self._capacity):            
                 node = AABBNode()
                 self._nodes.append(node)
-                node.nextNodeIndex = nodeIndex + 1
+                node.next = nodeIndex + 1
             
-            self._nodes[self._nodeCapacity - 1].nextNodeIndex = AABB_NULL_NODE
-            self._nextFreeNodeIndex = self._allocatedNodeCount
+            self._nodes[self._capacity - 1].next = AABB_NULL_NODE
+            self._nextFree = self._allocated
 
-        nodeIndex = self._nextFreeNodeIndex
+        nodeIndex = self._nextFree
         allocatedNode = self._nodes[nodeIndex]
-        allocatedNode.parentNodeIndex = AABB_NULL_NODE
-        allocatedNode.leftNodeIndex = AABB_NULL_NODE
-        allocatedNode.rightNodeIndex = AABB_NULL_NODE
-        self._nextFreeNodeIndex = allocatedNode.nextNodeIndex
-        self._allocatedNodeCount+=1
+        allocatedNode.parent = AABB_NULL_NODE
+        allocatedNode.left = AABB_NULL_NODE
+        allocatedNode.right = AABB_NULL_NODE
+        self._nextFree = allocatedNode.next
+        self._allocated+=1
         return nodeIndex
       
     def deallocateNode(self, nodeIndex):
         deallocatedNode = self._nodes[nodeIndex]
-        deallocatedNode.nextNodeIndex = self._nextFreeNodeIndex
-        self._nextFreeNodeIndex = nodeIndex
-        self._allocatedNodeCount-=1
+        deallocatedNode.next = self._nextFree
+        self._nextFree = nodeIndex
+        self._allocated-=1
 
     def insertLeaf(self, leafNodeIndex):
 
-        if self._rootNodeIndex == AABB_NULL_NODE:
-        	self._rootNodeIndex = leafNodeIndex
+        if self._root == AABB_NULL_NODE:
+        	self._root = leafNodeIndex
         	return
         
-        treeNodeIndex = self._rootNodeIndex
+        treeNodeIndex = self._root
         leafNode = self._nodes[leafNodeIndex]
         while self._nodes[treeNodeIndex].isLeaf() is False:
         
         	# because of the test in the while loop above we know we are never a leaf inside it
         	treeNode = self._nodes[treeNodeIndex]
-        	leftNodeIndex = treeNode.leftNodeIndex
-        	rightNodeIndex = treeNode.rightNodeIndex
-        	leftNode = self._nodes[leftNodeIndex]
-        	rightNode = self._nodes[rightNodeIndex]
+        	left = treeNode.left
+        	right = treeNode.right
+        	leftNode = self._nodes[left]
+        	rightNode = self._nodes[right]
         	combinedAabb = treeNode.aabb.merge(leafNode.aabb)
 
         	newParentNodeCost = 2.0 * combinedAabb.surfaceArea
@@ -145,77 +145,77 @@ class AABBTree(object):
     
         	# otherwise descend in the cheapest direction
         	if costLeft < costRight:
-        		treeNodeIndex = leftNodeIndex
+        		treeNodeIndex = left
         	else:
-        		treeNodeIndex = rightNodeIndex
+        		treeNodeIndex = right
         
         # the leafs sibling is going to be the node we found above and we are going to create a new
         # parent node and attach the leaf and this item
         leafSiblingIndex = treeNodeIndex
         leafSibling = self._nodes[leafSiblingIndex]
-        oldParentIndex = leafSibling.parentNodeIndex
+        oldParentIndex = leafSibling.parent
         newParentIndex = self.allocateNode()
         newParent = self._nodes[newParentIndex]
-        newParent.parentNodeIndex = oldParentIndex
+        newParent.parent = oldParentIndex
         newParent.aabb = leafNode.aabb.merge(leafSibling.aabb) # the new parents aabb is the leaf aabb combined with it's siblings aabb
-        newParent.leftNodeIndex = leafSiblingIndex
-        newParent.rightNodeIndex = leafNodeIndex
-        leafNode.parentNodeIndex = newParentIndex
-        leafSibling.parentNodeIndex = newParentIndex
+        newParent.left = leafSiblingIndex
+        newParent.right = leafNodeIndex
+        leafNode.parent = newParentIndex
+        leafSibling.parent = newParentIndex
 
-        if (oldParentIndex == AABB_NULL_NODE):
+        if oldParentIndex == AABB_NULL_NODE:
         	# the old parent was the root and so this is now the root
-        	_rootNodeIndex = newParentIndex
+        	self._root = newParentIndex
         else:
         	# the old parent was not the root and so we need to patch the left or right index to
         	# point to the new node
         	oldParent = self._nodes[oldParentIndex]
-        	if oldParent.leftNodeIndex == leafSiblingIndex:
-        		oldParent.leftNodeIndex = newParentIndex
+        	if oldParent.left == leafSiblingIndex:
+        		oldParent.left = newParentIndex
         	else:
-        		oldParent.rightNodeIndex = newParentIndex
+        		oldParent.right = newParentIndex
         
         # finally we need to walk back up the tree fixing heights and areas
-        treeNodeIndex = leafNode.parentNodeIndex
+        treeNodeIndex = leafNode.parent
         self.fixUpwardsTree(treeNodeIndex)
 
     def removeLeaf(self, leafNodeIndex):
         # if the leaf is the root then we can just clear the root pointer and return
-        if (leafNodeIndex == self._rootNodeIndex):
-        	self._rootNodeIndex = AABB_NULL_NODE
+        if (leafNodeIndex == self._root):
+        	self._root = AABB_NULL_NODE
         	return
         
 
         leafNode = self._nodes[leafNodeIndex]
-        parentNodeIndex = leafNode.parentNodeIndex
-        parentNode = self._nodes[parentNodeIndex]
-        grandParentNodeIndex = parentNode.parentNodeIndex
-        siblingNodeIndex = parentNode.rightNodeIndex if parentNode.leftNodeIndex == leafNodeIndex else parentNode.leftNodeIndex
+        parent = leafNode.parent
+        parentNode = self._nodes[parent]
+        grandparent = parentNode.parent
+        siblingNodeIndex = parentNode.right if parentNode.left == leafNodeIndex else parentNode.left
         #assert(siblingNodeIndex != AABB_NULL_NODE); // we must have a sibling
         siblingNode = self._nodes[siblingNodeIndex]
         
-        if grandParentNodeIndex != AABB_NULL_NODE:
+        if grandparent != AABB_NULL_NODE:
         
         	# if we have a grand parent (i.e. the parent is not the root) then destroy the parent and connect the sibling to the grandparent in its
         	# place
-        	grandParentNode = self._nodes[grandParentNodeIndex]
-        	if grandParentNode.leftNodeIndex == parentNodeIndex:
-        		grandParentNode.leftNodeIndex = siblingNodeIndex
+        	grandParentNode = self._nodes[grandparent]
+        	if grandParentNode.left == parent:
+        		grandParentNode.left = siblingNodeIndex
         	else:
-        		grandParentNode.rightNodeIndex = siblingNodeIndex
+        		grandParentNode.right = siblingNodeIndex
 
-        	siblingNode.parentNodeIndex = grandParentNodeIndex
-        	self.deallocateNode(parentNodeIndex)
+        	siblingNode.parent = grandparent
+        	self.deallocateNode(parent)
 
-        	self.fixUpwardsTree(grandParentNodeIndex)
+        	self.fixUpwardsTree(grandparent)
         
         else:
         	# if we have no grandparent then the parent is the root and so our sibling becomes the root and has it's parent removed
-        	_rootNodeIndex = siblingNodeIndex
-        	siblingNode.parentNodeIndex = AABB_NULL_NODE
-        	self.deallocateNode(parentNodeIndex)
+        	self._root = siblingNodeIndex
+        	siblingNode.parent = AABB_NULL_NODE
+        	self.deallocateNode(parent)
         
-        leafNode.parentNodeIndex = AABB_NULL_NODE
+        leafNode.parent = AABB_NULL_NODE
 
     def updateLeaf(self, leafNodeIndex, newAaab):
         node = self._nodes[leafNodeIndex]
@@ -236,11 +236,11 @@ class AABBTree(object):
         
             treeNode = self._nodes[treeNodeIndex]
 
-            leftNode = self._nodes[treeNode.leftNodeIndex]
-            rightNode = self._nodes[treeNode.rightNodeIndex]
+            leftNode = self._nodes[treeNode.left]
+            rightNode = self._nodes[treeNode.right]
             treeNode.aabb = leftNode.aabb.merge(rightNode.aabb)
 
-            treeNodeIndex = treeNode.parentNodeIndex
+            treeNodeIndex = treeNode.parent
         
     def insertAABB(self, aabb):
         nodeIndex = self.allocateNode()
@@ -263,7 +263,7 @@ class AABBTree(object):
 if __name__ == '__main__':
 
 
-    t = AABBTree(10)
+    t = AABBTree(20)
 
     q1 = AABB(glm.vec3(1,1,0), glm.vec3(2,2,0))
     t.insertAABB(q1)
@@ -276,6 +276,10 @@ if __name__ == '__main__':
 
     q4 = AABB(glm.vec3(-10,-10,0), glm.vec3(-5,-5,0))
     t.insertAABB(q4)
+
+    q5 = AABB(glm.vec3(7,-6,0), glm.vec3(9,-4,0))
+    t.insertAABB(q5)
+
 
     print('fim')
 
