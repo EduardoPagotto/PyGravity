@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 '''
 Created on 20191105
-Update on 20191105
+Update on 20191107
 @author: Eduardo Pagotto
  '''
 
 # ref: https://www.azurefromthetrenches.com/introductory-guide-to-aabb-tree-collision-detection/
 
 import glm
+from collections import deque
 
 class AABB(object):
     def __init__(self, min, max):
@@ -78,7 +79,6 @@ class AABBTree(object):
     def allocateNode(self):
         if self._nextFree == AABB_NULL_NODE:
             self._capacity += self._growthSize
-            #_nodes.resize(_capacity);
             for nodeIndex in range(self._allocated, self._capacity):            
                 node = AABBNode()
                 self._nodes.append(node)
@@ -185,7 +185,6 @@ class AABBTree(object):
         	self._root = AABB_NULL_NODE
         	return
         
-
         leafNode = self._nodes[leafNodeIndex]
         parent = leafNode.parent
         parentNode = self._nodes[parent]
@@ -230,7 +229,6 @@ class AABBTree(object):
         node.aabb = newAaab
         self.insertLeaf(leafNodeIndex)
         
-
     def fixUpwardsTree(self, treeNodeIndex):
         while treeNodeIndex != AABB_NULL_NODE:
         
@@ -249,16 +247,43 @@ class AABBTree(object):
         self.insertLeaf(nodeIndex)
         self._objectNodeIndexMap.append((aabb, nodeIndex))
 
+    # TODO: Testar
+    def removeObject(self, aabb): 
+        for item in self._objectNodeIndexMap:
+            if item[0]==aabb:
+                indice = item[1]
+                self.removeLeaf(indice)
+                self.deallocateNode(indice)
+                self._objectNodeIndexMap.remove(item)
+                break
 
+    # TODO: Testar
+    def updateObject(self, aabb):
+        for item in self._objectNodeIndexMap:
+            if item[0]==aabb:
+                indice = item[1]
+                self.updateLeaf(indice, aabb)
 
+    # TODO: testar
+    def queryOverlaps(self, testAabb):
+        overlaps = [] 
+        stack = deque() 
+        stack.append(self._root) 
+        while len(stack) > 0:
 
-	# def removeObject(const std::shared_ptr<IAABB>& object):
-    #     pass
+            nodeIndex = stack.pop()
+            if nodeIndex == AABB_NULL_NODE:
+                continue
 
-	# def updateObject(const std::shared_ptr<IAABB>& object):
-    #     pass
-
-	#std::forward_list<std::shared_ptr<IAABB>> queryOverlaps(const std::shared_ptr<IAABB>& object) const;
+            node = self._nodes[nodeIndex]
+            if node.aabb.overlaps(testAabb):
+                if (node.isLeaf() and node.aabb != testAabb):
+                    overlaps.append(node.testAabb)
+                else:
+                    stack.append(node.leftNodeIndex)
+                    stack.append(node.rightNodeIndex)
+        		
+        return overlaps
 
 if __name__ == '__main__':
 
@@ -282,17 +307,3 @@ if __name__ == '__main__':
 
 
     print('fim')
-
-    # novo = t.allocateNode()
-
-
-    # mundo = AABB()
-    # mundo.setMinMax(glm.vec3(-10.0, -10.0, -10.0), glm.vec3(10.0, 10.0, 10.0))
-    # t.updateLeaf(novo, mundo)
-
-    # novo2 = t.allocateNode()
-    # t1 = AABB()
-    # t1.setMinMax(glm.vec3(-30.0, -30.0, -30.0), glm.vec3(-15.0, -15.0, -15.0))
-    # t.updateLeaf(novo, t1)
-
-    # print(str(t))
