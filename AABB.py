@@ -17,8 +17,11 @@ class AABB(object):
         self.size = max - min # [glm.vec3] -- [Width:x; Height:y; Depth:z]
         self.surfaceArea = 2.0 * (self.size.x * self.size.y + self.size.x * self.size.z + self.size.y * self.size.z)
 
+    def _v3(self, val):
+        return '({0:.2f} {1:.2f} {2:.2f})'.format(val.x, val.y, val.z)
+
     def __str__(self):
-        return 'MIN:{0} MAX:{1}'.format(self.min, self.max)
+        return 'MIN:{0} MAX:{1} SIZE:{2} A:{3}'.format(self._v3(self.min), self._v3(self.max), self._v3(self.size), self.surfaceArea)
 
     def overlaps(self, other): 
         return (self.max.x > other.min.x and
@@ -56,6 +59,13 @@ class AABBNode(object):
     def isLeaf(self):
         return self.left == AABB_NULL_NODE
 
+    def __str__(self):
+        return '{0} ^:{1}, <:{2}, >:{3}, next:{4}'.format(self.aabb,
+                                                            self.parent,
+                                                            self.left,
+                                                            self.right,
+                                                            self.next)
+
 class AABBTree(object):
     def __init__(self, initialSize):
 
@@ -75,6 +85,27 @@ class AABBTree(object):
 
         if initialSize > 0:
             self._nodes[initialSize-1].next = AABB_NULL_NODE
+
+    def debug(self):
+       self.debug_data(self._root)
+        
+    def debug_data(self, indiceNode):
+
+        if indiceNode == AABB_NULL_NODE:
+            return
+
+        node = self._nodes[indiceNode]
+
+        if node.left == AABB_NULL_NODE and node.right == AABB_NULL_NODE:
+            print('Leaf:{0}-{1}'.format(indiceNode, node))
+        else:
+            print('Node:{0}-{1}'.format(indiceNode, node))
+
+        if node.left != AABB_NULL_NODE:
+            self.debug_data(node.left)
+
+        if node.right != AABB_NULL_NODE:
+            self.debug_data(node.right)
 
     def allocateNode(self):
         if self._nextFree == AABB_NULL_NODE:
@@ -304,6 +335,8 @@ if __name__ == '__main__':
 
     q5 = AABB(glm.vec3(7,-6,0), glm.vec3(9,-4,0))
     t.insertAABB(q5)
+
+    t.debug()
 
 
     print('fim')
