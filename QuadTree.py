@@ -67,6 +67,8 @@ class QuadTree(object):
         size_w = self.boundary.w / 2
         size_h = self.boundary.h / 2
         
+        # FIXME: considera a tela com 0,0 em top-left (opengl e botton-left)
+        # para opengl trocar north com south
         ne = Rectangle(x + size_w, y - size_h, size_w, size_h)
         nw = Rectangle(x - size_w, y - size_h, size_w, size_h)
         se = Rectangle(x + size_w, y + size_h, size_w, size_h)
@@ -137,8 +139,7 @@ if __name__ == '__main__':
 
     qt = QuadTree(boundary, 4)
 
-    for _ in range(150):
-        #p = Point(randomic(boundary.w), randomic(boundary.h))
+    for _ in range(50):
         qt.insert(randomic(boundary))
 
     print(str(qt))
