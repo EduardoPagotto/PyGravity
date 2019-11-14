@@ -28,13 +28,13 @@ class Octant(object):
                 point.z >= self.min.z and
                 point.z < self.max.z)
                  
-    def intersects(self, range):
-        return (range.pos.x - range.size.x > self.max.x or
-                range.pos.x + range.size.x < self.min.x or
-                range.pos.y - range.size.y > self.max.y or
-                range.pos.y + range.size.y < self.min.y or
-                range.pos.z - range.size.z > self.max.z or
-                range.pos.z + range.size.z < self.min.z)
+    def intersects(self, octant):
+        return (octant.min.x > self.max.x or
+                octant.max.x < self.min.x or
+                octant.min.y > self.max.y or
+                octant.max.y < self.min.y or
+                octant.min.z > self.max.z or
+                octant.max.z < self.min.z)
 
 
 class Octree(object):
@@ -130,26 +130,26 @@ class Octree(object):
             if self.botton_southwest.insert(point):
                 return True
 
-    def query(self, range, found):
+    def query(self, octant, found):
         if not found:
             found = []
         
-        if not self.boundary.intersects(range):
+        if not self.boundary.intersects(octant):
             return
         else:
             for p in self.points:
-                if range.contains(p):
+                if octant.contains(p):
                     found.push(p)
                 
             if self.divided:
-                self.top_northwest.query(range, found)
-                self.top_northeast.query(range, found)
-                self.top_southwest.query(range, found)
-                self.top_southeast.query(range, found)
-                self.botton_northwest.query(range, found)
-                self.botton_northeast.query(range, found)
-                self.botton_southwest.query(range, found)
-                self.botton_southeast.query(range, found)
+                self.top_northwest.query(octant, found)
+                self.top_northeast.query(octant, found)
+                self.top_southwest.query(octant, found)
+                self.top_southeast.query(octant, found)
+                self.botton_northwest.query(octant, found)
+                self.botton_northeast.query(octant, found)
+                self.botton_southwest.query(octant, found)
+                self.botton_southeast.query(octant, found)
             
         return found
 
