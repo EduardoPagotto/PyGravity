@@ -130,6 +130,29 @@ class Octree(object):
             if self.botton_southwest.insert(point):
                 return True
 
+    def query(self, range, found):
+        if not found:
+            found = []
+        
+        if not self.boundary.intersects(range):
+            return
+        else:
+            for p in self.points:
+                if range.contains(p):
+                    found.push(p)
+                
+            if self.divided:
+                self.top_northwest.query(range, found)
+                self.top_northeast.query(range, found)
+                self.top_southwest.query(range, found)
+                self.top_southeast.query(range, found)
+                self.botton_northwest.query(range, found)
+                self.botton_northeast.query(range, found)
+                self.botton_southwest.query(range, found)
+                self.botton_southeast.query(range, found)
+            
+        return found
+
 
 def randomic(boundary):
     randx = randint(boundary.min.x, boundary.max.x)
