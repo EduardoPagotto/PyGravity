@@ -14,26 +14,27 @@ class Octant(object):
     def __init__(self, pos, size):
         self.pos = pos
         self.size = size
+        self.max = self.pos + self.size
+        self.min = self.pos - self.size
 
     def __str__(self):
         return 'pos:{0} size:{1}'.format(self.pos, self.size)
 
     def contains(self, point):
-        return (point.x >= self.pos.x - self.size.x and
-                point.x < self.pos.x + self.size.x and
-                point.y >= self.pos.y - self.size.y and
-                point.y < self.pos.y + self.size.y and
-                point.z >= self.pos.z - self.size.z and
-                point.z < self.pos.z + self.size.z)
+        return (point.x >= self.min.x and
+                point.x < self.max.x and
+                point.y >= self.min.y and
+                point.y < self.max.y and
+                point.z >= self.min.z and
+                point.z < self.max.z)
                  
-
     def intersects(self, range):
-        return (range.pos.x - range.size.x > self.pos.x + self.size.x or
-                range.pos.x + range.size.x < self.pos.x - self.size.x or
-                range.pos.y - range.size.y > self.pos.y + self.size.y or
-                range.pos.y + range.size.y < self.pos.y - self.size.y or
-                range.pos.z - range.size.z > self.pos.z + self.size.z or
-                range.pos.z + range.size.z < self.pos.z - self.size.z)
+        return (range.pos.x - range.size.x > self.max.x or
+                range.pos.x + range.size.x < self.min.x or
+                range.pos.y - range.size.y > self.max.y or
+                range.pos.y + range.size.y < self.min.y or
+                range.pos.z - range.size.z > self.max.z or
+                range.pos.z + range.size.z < self.min.z)
 
 
 class Octree(object):
@@ -131,9 +132,9 @@ class Octree(object):
 
 
 def randomic(boundary):
-    randx = randint(boundary.pos.x - boundary.size.x, boundary.pos.x + boundary.size.x)
-    randy = randint(boundary.pos.y - boundary.size.y, boundary.pos.y + boundary.size.y)
-    randz = randint(boundary.pos.z - boundary.size.z, boundary.pos.z + boundary.size.z)
+    randx = randint(boundary.min.x, boundary.max.x)
+    randy = randint(boundary.min.y, boundary.max.y)
+    randz = randint(boundary.min.z, boundary.max.z)
 
     return glm.vec3(randx, randy, randz)
 
