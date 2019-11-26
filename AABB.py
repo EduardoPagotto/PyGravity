@@ -45,6 +45,29 @@ class AABB(object):
     def intersection(self, other):
         return AABB(glm.min(self.max, other.max), glm.max(self.min, other.min))
 
+    def transformation(self, trans):
+        # FIXME: esta errado!!!!
+        self.min = glm.vec3(trans * glm.vec4(self.min, 1.0))
+        self.max = glm.vec3(trans * glm.vec4(self.max, 1.0))
+
+# AABB AABB::transformation(const glm::mat4& transformation) {
+
+#     glm::vec3 val, min, max;
+#     for (short i = 0; i < 8; i++) {
+#         val = glm::vec3(transformation * glm::vec4(vertices[i], 1.0f));
+#         if (i != 0) {
+#             min = glm::min(min, val);
+#             max = glm::max(max, val);
+#         } else {
+#             min = val;
+#             max = val;
+#         }
+#     }
+
+   
+
+
+
 AABB_NULL_NODE = -1
 
 class AABBNode(object):
