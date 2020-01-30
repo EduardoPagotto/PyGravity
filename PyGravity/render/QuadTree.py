@@ -17,11 +17,11 @@ class QuadTree(object):
         self.boundary = boundary
         self.capacity = capacity
         self.points = []
-        self.northwest = None
-        self.northeast = None
-        self.southwest = None
-        self.southeast = None
         self.divided = False
+        self.nw = None
+        self.ne = None
+        self.sw = None
+        self.se = None
 
     def __str__(self):
         return 'boundery:{0}'.format(self.boundary)
@@ -38,10 +38,10 @@ class QuadTree(object):
         se = Rectangle(glm.vec2(p.x + s.x, p.y + s.y), s)
         sw = Rectangle(glm.vec2(p.x - s.x, p.y + s.y), s)
 
-        self.northeast = QuadTree(ne, self.capacity)
-        self.northwest = QuadTree(nw, self.capacity)
-        self.southeast = QuadTree(se, self.capacity)
-        self.southwest = QuadTree(sw, self.capacity)
+        self.ne = QuadTree(ne, self.capacity)
+        self.nw = QuadTree(nw, self.capacity)
+        self.se = QuadTree(se, self.capacity)
+        self.sw = QuadTree(sw, self.capacity)
 
         self.divided = True
         
@@ -58,16 +58,16 @@ class QuadTree(object):
             if self.divided is False:
                 self.subdivide()
                 
-            if self.northeast.insert(point):
+            if self.ne.insert(point):
                 return True
 
-            if self.northwest.insert(point):
+            if self.nw.insert(point):
                 return True
 
-            if self.southeast.insert(point):
+            if self.se.insert(point):
                 return True
 
-            if self.southwest.insert(point):
+            if self.sw.insert(point):
                 return True
         
 
@@ -80,10 +80,10 @@ class QuadTree(object):
                     found.append(p)
                 
             if self.divided:
-                self.northwest.query(retangle, found)
-                self.northeast.query(retangle, found)
-                self.southwest.query(retangle, found)
-                self.southeast.query(retangle, found)
+                self.nw.query(retangle, found)
+                self.ne.query(retangle, found)
+                self.sw.query(retangle, found)
+                self.se.query(retangle, found)
             
 def randomic(boundary):
     randx = randint(boundary.pos.x - boundary.size.x, boundary.pos.x + boundary.size.x)

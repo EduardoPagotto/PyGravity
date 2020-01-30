@@ -10,32 +10,8 @@ import glm
 from random import seed
 from random import randint
 
-class Octant(object):
-    def __init__(self, pos, size):
-        self.pos = pos
-        self.size = size
-        self.max = self.pos + self.size
-        self.min = self.pos - self.size
-
-    def __str__(self):
-        return 'pos:{0} size:{1}'.format(self.pos, self.size)
-
-    def contains(self, point):
-        return (point.x >= self.min.x and
-                point.x < self.max.x and
-                point.y >= self.min.y and
-                point.y < self.max.y and
-                point.z >= self.min.z and
-                point.z < self.max.z)
-                 
-    def intersects(self, octant):
-        return (octant.min.x > self.max.x or
-                octant.max.x < self.min.x or
-                octant.min.y > self.max.y or
-                octant.max.y < self.min.y or
-                octant.min.z > self.max.z or
-                octant.max.z < self.min.z)
-
+#from PyGravity.render.AABB import AABB
+from AABB import AABB
 
 class Octree(object):
     def __init__(self, boundary, capacity):
@@ -43,15 +19,14 @@ class Octree(object):
         self.capacity = capacity
         self.points = []
 
-        self.top_northwest = None
-        self.top_northeast = None
-        self.top_southwest = None
-        self.top_southeast = None
-
-        self.botton_northwest = None
-        self.botton_northeast = None
-        self.botton_southwest = None
-        self.botton_southeast = None
+        self.tnw = None
+        self.tne = None
+        self.tsw = None
+        self.tse = None
+        self.bnw = None
+        self.bne = None
+        self.bsw = None
+        self.bse = None
 
         self.divided = False
 
@@ -71,25 +46,25 @@ class Octree(object):
         zmax = p.z + s.z
         zmin = p.z - s.z
 
-        tne = Octant(glm.vec3(xmax, ymax, zmax), s)
-        tnw = Octant(glm.vec3(xmin, ymax, zmax), s)
-        tsw = Octant(glm.vec3(xmin, ymax, zmin), s)
-        tse = Octant(glm.vec3(xmax, ymax, zmin), s)
+        tne = AABB(glm.vec3(xmax, ymax, zmax), s)
+        tnw = AABB(glm.vec3(xmin, ymax, zmax), s)
+        tsw = AABB(glm.vec3(xmin, ymax, zmin), s)
+        tse = AABB(glm.vec3(xmax, ymax, zmin), s)
         
-        bne = Octant(glm.vec3(xmax, ymin, zmax), s)
-        bnw = Octant(glm.vec3(xmin, ymin, zmax), s)
-        bsw = Octant(glm.vec3(xmin, ymin, zmin), s)
-        bse = Octant(glm.vec3(xmax, ymin, zmin), s)
+        bne = AABB(glm.vec3(xmax, ymin, zmax), s)
+        bnw = AABB(glm.vec3(xmin, ymin, zmax), s)
+        bsw = AABB(glm.vec3(xmin, ymin, zmin), s)
+        bse = AABB(glm.vec3(xmax, ymin, zmin), s)
 
-        self.top_northeast = Octree(tne, self.capacity)
-        self.top_northwest = Octree(tnw, self.capacity)
-        self.top_southwest = Octree(tsw, self.capacity)
-        self.top_southeast = Octree(tse, self.capacity)
+        self.tne = Octree(tne, self.capacity)
+        self.tnw = Octree(tnw, self.capacity)
+        self.tsw = Octree(tsw, self.capacity)
+        self.tse = Octree(tse, self.capacity)
 
-        self.botton_northeast = Octree(bne, self.capacity)
-        self.botton_northwest = Octree(bnw, self.capacity)
-        self.botton_southwest = Octree(bsw, self.capacity)
-        self.botton_southeast = Octree(bse, self.capacity)
+        self.bne = Octree(bne, self.capacity)
+        self.bnw = Octree(bnw, self.capacity)
+        self.bsw = Octree(bsw, self.capacity)
+        self.bse = Octree(bse, self.capacity)
 
         self.divided = True
 
@@ -106,54 +81,48 @@ class Octree(object):
             if self.divided is False:
                 self.subdivide()
                 
-            if self.top_northeast.insert(point):
+            if self.tne.insert(point):
                 return True
 
-            if self.top_northwest.insert(point):
+            if self.tnw.insert(point):
                 return True
 
-            if self.top_southeast.insert(point):
+            if self.tse.insert(point):
                 return True
 
-            if self.top_southwest.insert(point):
+            if self.tsw.insert(point):
                 return True
 
-            if self.botton_northeast.insert(point):
+            if self.bne.insert(point):
                 return True
 
-            if self.botton_northwest.insert(point):
+            if self.bnw.insert(point):
                 return True
 
-            if self.botton_southeast.insert(point):
+            if self.bse.insert(point):
                 return True
 
-            if self.botton_southwest.insert(point):
+            if self.bsw.insert(point):
                 return True
 
-    def query(self, octant, found):
-        if not found:
-            found = []
-        
-        if not self.boundary.intersects(octant):
+    def query(self, aabb, found):
+        if not self.boundary.intersects(aabb):
             return
         else:
             for p in self.points:
-                if octant.contains(p):
-                    found.push(p)
+                if aabb.contains(p):
+                    found.append(p)
                 
             if self.divided:
-                self.top_northwest.query(octant, found)
-                self.top_northeast.query(octant, found)
-                self.top_southwest.query(octant, found)
-                self.top_southeast.query(octant, found)
-                self.botton_northwest.query(octant, found)
-                self.botton_northeast.query(octant, found)
-                self.botton_southwest.query(octant, found)
-                self.botton_southeast.query(octant, found)
+                self.tnw.query(aabb, found)
+                self.tne.query(aabb, found)
+                self.tsw.query(aabb, found)
+                self.tse.query(aabb, found)
+                self.bnw.query(aabb, found)
+                self.bne.query(aabb, found)
+                self.bsw.query(aabb, found)
+                self.bse.query(aabb, found)
             
-        return found
-
-
 def randomic(boundary):
     randx = randint(boundary.min.x, boundary.max.x)
     randy = randint(boundary.min.y, boundary.max.y)
@@ -166,7 +135,7 @@ if __name__ == '__main__':
 
     seed(1)
 
-    boundary = Octant(pos=glm.vec3(200.0,200.0,200.0), size=glm.vec3(200.0,200.0,200.0))
+    boundary = AABB(pos=glm.vec3(200.0,200.0,200.0), size=glm.vec3(200.0,200.0,200.0))
 
     oc = Octree(boundary, 4)
 

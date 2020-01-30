@@ -13,16 +13,15 @@ from random import randint
 from Rectangle import Rectangle
 
 class QuadTreeLeafy(object):
-    def __init__(self, boundary):
+    def __init__(self, boundary, capacity):
         self.boundary = boundary
-        self.point = None
+        self.capacity = capacity
+        self.points = []
         self.divided = False
-
-        self.northwest = None
-        self.northeast = None
-        self.southwest = None
-        self.southeast = None
-
+        self.nw = None
+        self.ne = None
+        self.sw = None
+        self.se = None
 
     def __str__(self):
         return 'boundery:{0}'.format(self.boundary)
@@ -39,24 +38,24 @@ class QuadTreeLeafy(object):
         se = Rectangle(glm.vec2(p.x + s.x, p.y + s.y), s)
         sw = Rectangle(glm.vec2(p.x - s.x, p.y + s.y), s)
 
-        self.northeast = QuadTreeLeafy(ne)
-        self.northwest = QuadTreeLeafy(nw)
-        self.southeast = QuadTreeLeafy(se)
-        self.southwest = QuadTreeLeafy(sw)
+        self.ne = QuadTreeLeafy(ne, self.capacity)
+        self.nw = QuadTreeLeafy(nw, self.capacity)
+        self.se = QuadTreeLeafy(se, self.capacity)
+        self.sw = QuadTreeLeafy(sw, self.capacity)
 
         self.divided = True
 
     def __insert_new(self, point):
-        if self.northeast.insert(point):
+        if self.ne.insert(point):
             return True
 
-        if self.northwest.insert(point):
+        if self.nw.insert(point):
             return True
 
-        if self.southeast.insert(point):
+        if self.se.insert(point):
             return True
 
-        if self.southwest.insert(point):
+        if self.sw.insert(point):
             return True
 
     def insert(self, point):
@@ -64,16 +63,16 @@ class QuadTreeLeafy(object):
         if self.boundary.contains(point) is not True:
             return False
 
-        if (self.point is None) and (self.divided is False):
-            self.point = point
+        if (len(self.points) < self.capacity) and (self.divided is False):
+            self.points.append(point)
             return True
         else:
             if self.divided is False:
                 self.subdivide()
 
-            if self.point is not None:
-                self.__insert_new(self.point)
-                self.point = None
+            for p in self.points:
+                self.__insert_new(p)
+                self.points = []
 
             return self.__insert_new(point)
 
@@ -81,15 +80,15 @@ class QuadTreeLeafy(object):
         if not self.boundary.intersects(retangle):
             return
         else:
-            if self.point is not None:
-                if retangle.contains(self.point):
-                    found.append(self.point)
+            for p in self.points:
+                if retangle.contains(p):
+                    found.append(p)
                 
             if self.divided:
-                self.northwest.query(retangle, found)
-                self.northeast.query(retangle, found)
-                self.southwest.query(retangle, found)
-                self.southeast.query(retangle, found)
+                self.nw.query(retangle, found)
+                self.ne.query(retangle, found)
+                self.sw.query(retangle, found)
+                self.se.query(retangle, found)
             
 def randomic(boundary):
     randx = randint(boundary.pos.x - boundary.size.x, boundary.pos.x + boundary.size.x)
@@ -110,7 +109,7 @@ if __name__ == '__main__':
 
     boundary = Rectangle(glm.vec2(20,20), glm.vec2(20,20))
 
-    qt = QuadTreeLeafy(boundary)
+    qt = QuadTreeLeafy(boundary, 1)
 
     for i in range(4):
         for j in range(4):
