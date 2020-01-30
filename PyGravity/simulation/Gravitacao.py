@@ -7,10 +7,10 @@ Update on 20191105
 
 import sys
 import glm
-from Body import Body
-from Universe import Universe
 from time import sleep
 
+from PyGravity.simulation.Body import Body
+from PyGravity.simulation.Universe import Universe
 
 class Gravitacao(object):
     def __init__(self, universo):

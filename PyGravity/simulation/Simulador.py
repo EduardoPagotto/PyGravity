@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 '''
 Created on 20160921
-Update on 20191105
+Update on 20200130
 @author: Eduardo Pagotto
  '''
 
 import sys
 import glm
-from Body import Body
-from Universe import Universe
-from Gravitacao import Gravitacao
+
 from time import sleep
 
 from OpenGL.GL import *     # pylint: disable=unused-wildcard-import
 from OpenGL.GLU import *    # pylint: disable=unused-wildcard-import
 from OpenGL.GLUT import *   # pylint: disable=unused-wildcard-import
+
+from PyGravity.simulation.Body import Body
+from PyGravity.simulation.Universe import Universe
+from PyGravity.simulation.Gravitacao import Gravitacao
 
 def RED():
     return glm.vec4(1.0, 0.0, 0.0, 1.0)

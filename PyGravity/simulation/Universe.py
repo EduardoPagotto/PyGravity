@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 '''
 Created on 20160921
-Update on 20191105
+Update on 20200130
 @author: Eduardo Pagotto
  '''
 
 import glm
-from Body import Body
+from PyGravity.simulation.Body import Body
 
 class Universe(object):
     def __init__(self, tamanho):
