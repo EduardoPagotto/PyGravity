@@ -116,12 +116,27 @@ def randomic(boundary):
 
 if __name__ == '__main__':
     
-    seed(1)
-    boundary = Rectangle(glm.vec2(200, 200), glm.vec2(200, 200))
+    # seed(1)
+    # boundary = Rectangle(glm.vec2(200, 200), glm.vec2(200, 200))
 
-    qt = QuadTree(boundary, 4)
+    # qt = QuadTree(boundary, 4)
 
-    for _ in range(50):
-        qt.insert(randomic(boundary))
+    # for _ in range(50):
+    #     qt.insert(randomic(boundary))
 
-    print(str(qt))
+    # print(str(qt))
+
+    boundary = Rectangle(glm.vec2(20,20), glm.vec2(20,20))
+
+    qt = QuadTree(boundary, 1)
+
+    for i in range(4):
+        for j in range(4):
+            x = 5 + 10 * i
+            y = 5 + 10 * j
+
+            qt.insert(glm.vec2(x,y))
+
+    print('fim')
+
+    
