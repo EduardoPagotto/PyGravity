@@ -22,7 +22,11 @@ class ClientBase(IClient):
         return
 
     def render(self):
-        return
+        #self.canvas.before()
+        # TODO desenhar aqui!!
+        sdl2.SDL_Delay(ctypes.c_uint(5))
+
+        #self.canvas.after()
 
     def keyCapture(self, tecla):
 
@@ -60,7 +64,17 @@ class ClientBase(IClient):
         return
 
     def windowEvent(self, _event):
-        return
-
+        if _event.window.event == sdl2.SDL_WINDOWEVENT_ENTER:
+            self.pause = False
+            sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, b"Resume..")
+        elif _event.window.event == sdl2.SDL_WINDOWEVENT_LEAVE:
+            self.pause = True
+            sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, b"Pause..")
+        elif _event.window.event == sdl2.SDL_WINDOWEVENT_RESIZED:
+            #pVideo->reshape(_event.data1, _event.data2);
+            pass
+        else:
+            pass
+    
     def paused(self):
         return self.pause
