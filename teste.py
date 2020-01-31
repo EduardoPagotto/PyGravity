@@ -8,13 +8,36 @@ Update on 20191125
 import numpy as np
 from PIL import Image
 
+from PyGravity.core.Canvas import Canvas
+from PyGravity.core.FlowControl import FlowControl
+from PyGravity.core.IClient import IClient
+
+class ClientGame(IClient):
+    def __init__(self):
+        pass
+
+    
+
 
 if __name__ == '__main__':
 
-    ar = np.array( [[100, 100, 100, 100],
-                    [100, 120, 120, 100],
-                    [100, 120, 120, 100],
-                    [100, 100, 100, 100]], dtype=np.uint8)
+    canvas = Canvas("teste", 640, 480)
+    
+    client = ClientGame()
+
+    flow = FlowControl(client)
+    flow.open()
+    flow.loop()
+
+
+
+
+
+    print('fim')
+    # ar = np.array( [[100, 100, 100, 100],
+    #                 [100, 120, 120, 100],
+    #                 [100, 120, 120, 100],
+    #                 [100, 100, 100, 100]], dtype=np.uint8)
 
     # ar = np.array( [[90, 90, 90, 90, 90, 100, 100, 100],
     #                 [100, 100, 100, 110, 110, 110, 110, 100],
@@ -46,9 +69,9 @@ if __name__ == '__main__':
 
     #ar = np.ones((512,512), dtype=np.uint16)
     #ar = np.full((4,4), 0,dtype=np.uint8)
-    print(str(ar))
+    #print(str(ar))
 
-    im = Image.fromarray(ar)
-    im.save('heightmap_4x4.png')
+    #im = Image.fromarray(ar)
+    #im.save('heightmap_4x4.png')
     #im.save('heightmap_8x8.png')
     #im.save('heightmap_16x16.png')

@@ -47,7 +47,8 @@ setuptools.setup(
     scripts=['bin/gravity.py'],
     data_files=[('etc',['etc/gravity.yaml']),],
     install_requires=['PyOpengl',
-                      'PyGLM',],
+                      'PyGLM',
+                      'pysdl2'],
     cmdclass={ # ref: https://stackoverflow.com/questions/20288711/post-install-script-with-python-setuptools
     'develop': PostDevelopCommand,
     'install': PostInstallCommand,}
