@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "HelloWorld",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": true,
+            "pythonPath": "${config:python.pythonPath}",
+            "program": "./examples/helloworld/helloworld.py",
+            "cwd": "${workspaceRoot}",
+            "env": {
+                "CFG_APP": "./etc/gravity.yaml"
+            },
+            "envFile": "${workspaceRoot}/.env",
+            "args": []
+        },
+        {
             "name": "Python",
             "type": "python",
             "request": "launch",
