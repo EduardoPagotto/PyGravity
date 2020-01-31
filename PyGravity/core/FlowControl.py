@@ -91,10 +91,11 @@ class FlowControl(object):
             timeElapsed = (sdl2.SDL_GetTicks() - frameTime)
             if timeElapsed < minimumFrameTime:
                 tot_delay = minimumFrameTime - timeElapsed
-                sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, b"DeltaTime: %d  Delay: %d", deltaTime, tot_delay)
-                sdl2.SDL_Delay(tot_delay)
+                #sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, "DeltaTime:{0} Delay:{1}".format(deltaTime, tot_delay).encode())
+                sdl2.SDL_Delay(ctypes.c_uint(int(tot_delay)))
             else:
-                sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, b"DeltaTime: %d TimeElapsed: %d", deltaTime, timeElapsed)
+                pass
+                #sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, "DeltaTime: {0} TimeElapsed: {1}".format(deltaTime, timeElapsed).encode())
 
 
             

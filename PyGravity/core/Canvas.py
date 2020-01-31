@@ -19,7 +19,7 @@ class Canvas(object):
 
         # Init
         if sdl2.SDL_Init(sdl2.SDL_INIT_EVERYTHING) != 0:
-            raise Exception(sdl2.SDL_GetError())
+            raise Exception(sdl2.SDL_GetError().decode())
 
         sdl2.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_MAJOR_VERSION, 3)
         sdl2.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_MINOR_VERSION, 2)
