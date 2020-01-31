@@ -6,7 +6,7 @@ Update on 20200130
  '''
 
 import glm
-from PyGravity.simulation.Body import Body
+from simulation.Body import Body
 
 class Universe(object):
     def __init__(self, tamanho):

@@ -14,9 +14,9 @@ from OpenGL.GL import *     # pylint: disable=unused-wildcard-import
 from OpenGL.GLU import *    # pylint: disable=unused-wildcard-import
 from OpenGL.GLUT import *   # pylint: disable=unused-wildcard-import
 
-from PyGravity.simulation.Body import Body
-from PyGravity.simulation.Universe import Universe
-from PyGravity.simulation.Gravitacao import Gravitacao
+from simulation.Body import Body
+from simulation.Universe import Universe
+from simulation.Gravitacao import Gravitacao
 
 def RED():
     return glm.vec4(1.0, 0.0, 0.0, 1.0)

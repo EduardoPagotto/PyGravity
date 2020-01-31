@@ -9,8 +9,8 @@ import sys
 import glm
 from time import sleep
 
-from PyGravity.simulation.Body import Body
-from PyGravity.simulation.Universe import Universe
+from simulation.Body import Body
+from simulation.Universe import Universe
 
 class Gravitacao(object):
     def __init__(self, universo):
