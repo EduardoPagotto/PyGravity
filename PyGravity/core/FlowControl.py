@@ -47,7 +47,7 @@ class FlowControl(object):
 
         running = True
         event = sdl2.SDL_Event()
-        while not running:
+        while running:
 
             frameTime = sdl2.SDL_GetTicks()
 
@@ -91,10 +91,10 @@ class FlowControl(object):
             timeElapsed = (sdl2.SDL_GetTicks() - frameTime)
             if timeElapsed < minimumFrameTime:
                 tot_delay = minimumFrameTime - timeElapsed
-                sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, "DeltaTime: %d  Delay: %d", deltaTime, tot_delay)
+                sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, b"DeltaTime: %d  Delay: %d", deltaTime, tot_delay)
                 sdl2.SDL_Delay(tot_delay)
             else:
-                sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, "DeltaTime: %d TimeElapsed: %d", deltaTime, timeElapsed)
+                sdl2.SDL_LogDebug(sdl2.SDL_LOG_CATEGORY_RENDER, b"DeltaTime: %d TimeElapsed: %d", deltaTime, timeElapsed)
 
 
             

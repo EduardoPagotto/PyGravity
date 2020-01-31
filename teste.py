@@ -13,17 +13,57 @@ from PyGravity.core.FlowControl import FlowControl
 from PyGravity.core.IClient import IClient
 
 class ClientGame(IClient):
-    def __init__(self):
-        pass
+    def __init__(self, canvas):
+        self.canvas = canvas
+
+    def start(self):
+        return
+
+    def stop(self):
+        return
+
+    def render(self):
+        return
+
+    def keyCapture(self, tecla):
+        return
+
+    def mouseButtonDownCapture(self, mb):
+        return
+
+    def mouseButtonUpCapture(self, mb):
+        return
+
+    def mouseMotionCapture(self, mb):
+        return
+
+    def joystickCapture(self, joy):
+        return
+
+    def joystickStatus(self, joy):
+        return
+
+    def userEvent(self, _event):
+        return
+
+    def newFPS(self, fps):
+        return
+
+    def windowEvent(self, _event):
+        return
+
+    def paused(self):
+        return False
+
+
+
 
     
-
-
 if __name__ == '__main__':
 
     canvas = Canvas("teste", 640, 480)
     
-    client = ClientGame()
+    client = ClientGame(canvas)
 
     flow = FlowControl(client)
     flow.open()
