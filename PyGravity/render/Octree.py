@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on 20191114
-Update on 20200130
+Update on 20200201
 @author: Eduardo Pagotto
  '''
 
@@ -14,11 +14,13 @@ from random import randint
 from AABB import AABB
 
 class Octree(object):
-    def __init__(self, boundary, capacity):
+    def __init__(self, boundary, capacity, leafyMode=False, deep=0):
         self.boundary = boundary
         self.capacity = capacity
+        self.leafyMode = leafyMode
+        self.deep = deep
         self.points = []
-
+        self.divided = False
         self.tnw = None
         self.tne = None
         self.tsw = None
@@ -28,16 +30,15 @@ class Octree(object):
         self.bsw = None
         self.bse = None
 
-        self.divided = False
-
     def __str__(self):
         return 'boundery:{0}'.format(self.boundary)
-
 
     def subdivide(self):
 
         p = self.boundary.pos
         s = self.boundary.size / 2
+        new_deep = self.deep + 1
+        self.divided = True
 
         xmax = p.x + s.x
         xmin = p.x - s.x
@@ -56,54 +57,65 @@ class Octree(object):
         bsw = AABB(glm.vec3(xmin, ymin, zmin), s)
         bse = AABB(glm.vec3(xmax, ymin, zmin), s)
 
-        self.tne = Octree(tne, self.capacity)
-        self.tnw = Octree(tnw, self.capacity)
-        self.tsw = Octree(tsw, self.capacity)
-        self.tse = Octree(tse, self.capacity)
+        self.tne = Octree(tne, self.capacity, self.leafyMode, new_deep)
+        self.tnw = Octree(tnw, self.capacity, self.leafyMode, new_deep)
+        self.tsw = Octree(tsw, self.capacity, self.leafyMode, new_deep)
+        self.tse = Octree(tse, self.capacity, self.leafyMode, new_deep)
 
-        self.bne = Octree(bne, self.capacity)
-        self.bnw = Octree(bnw, self.capacity)
-        self.bsw = Octree(bsw, self.capacity)
-        self.bse = Octree(bse, self.capacity)
+        self.bne = Octree(bne, self.capacity, self.leafyMode, new_deep)
+        self.bnw = Octree(bnw, self.capacity, self.leafyMode, new_deep)
+        self.bsw = Octree(bsw, self.capacity, self.leafyMode, new_deep)
+        self.bse = Octree(bse, self.capacity, self.leafyMode, new_deep)
 
-        self.divided = True
+        
+    def __insert_new(self, point):
+        if self.tne.insert(point):
+            return True
 
+        if self.tnw.insert(point):
+            return True
+
+        if self.tse.insert(point):
+            return True
+
+        if self.tsw.insert(point):
+            return True
+
+        if self.bne.insert(point):
+            return True
+
+        if self.bnw.insert(point):
+            return True
+
+        if self.bse.insert(point):
+            return True
+
+        if self.bsw.insert(point):
+            return True
 
     def insert(self, point):
 
         if self.boundary.contains(point) is not True:
             return False
 
-        if len(self.points) < self.capacity:
+        # by Karnaugh
+        A = len(self.points) < self.capacity
+        B = self.leafyMode is False
+        C = self.divided is False
+
+        if (A and B) or (A and C):
             self.points.append(point)
             return True
         else:
             if self.divided is False:
                 self.subdivide()
                 
-            if self.tne.insert(point):
-                return True
-
-            if self.tnw.insert(point):
-                return True
-
-            if self.tse.insert(point):
-                return True
-
-            if self.tsw.insert(point):
-                return True
-
-            if self.bne.insert(point):
-                return True
-
-            if self.bnw.insert(point):
-                return True
-
-            if self.bse.insert(point):
-                return True
-
-            if self.bsw.insert(point):
-                return True
+            if self.leafyMode is True:
+                for p in self.points:
+                    self.__insert_new(p)
+                    self.points = []
+    
+            self.__insert_new(point)
 
     def query(self, aabb, found):
         if not self.boundary.intersects(aabb):
@@ -133,16 +145,32 @@ def randomic(boundary):
 
 if __name__ == '__main__':
 
-    seed(1)
+    # seed(1)
 
-    boundary = AABB(pos=glm.vec3(200.0,200.0,200.0), size=glm.vec3(200.0,200.0,200.0))
+    # boundary = AABB(pos=glm.vec3(200.0,200.0,200.0), size=glm.vec3(200.0,200.0,200.0))
 
-    oc = Octree(boundary, 4)
+    # oc = Octree(boundary, 4)
+    # for _ in range(500):
+    #     p = randomic(boundary)
+    #     oc.insert(p)
 
+    # #print(o.contains(glm.vec3(-6,10,10)))
+    # print(str(oc))
 
-    for _ in range(500):
-        p = randomic(boundary)
-        oc.insert(p)
+    boundary = AABB(pos=glm.vec3(20.0, 20.0, 20.0), size=glm.vec3(20.0, 20.0, 20.0))
 
-    #print(o.contains(glm.vec3(-6,10,10)))
-    print(str(oc))
+    oc = Octree(boundary, 1, True)
+
+    for k in range(4):
+        for j in range(4):
+            for i in range(4):
+
+                x = 5 + 10 * i
+                y = 5 + 10 * j
+                z = 5 + 10 * k
+
+                oc.insert(glm.vec3(x,y,z))
+
+    oc.insert(glm.vec2(7,18))
+
+    print('fim')
