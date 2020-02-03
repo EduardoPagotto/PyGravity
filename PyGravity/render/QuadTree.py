@@ -74,30 +74,31 @@ class QuadTree(object):
         if (A and B) or (A and C):
             self.points.append(point)
             return True
-        else:
-            if self.divided is False:
-                self.subdivide()
-                    
-            if self.leafyMode is True:
-                for p in self.points:
-                    self.__insert_new(p)
-                    self.points = []
+    
+        if self.divided is False:
+            self.subdivide()
+                
+        if self.leafyMode is True:
+            for p in self.points:
+                self.__insert_new(p)
 
-            return self.__insert_new(point)
+            self.points = []
+
+        return self.__insert_new(point)
 
     def query(self, retangle, found):
         if not self.boundary.intersects(retangle):
             return
-        else:
-            for p in self.points:
-                if retangle.contains(p):
-                    found.append(p)
-                
-            if self.divided:
-                self.nw.query(retangle, found)
-                self.ne.query(retangle, found)
-                self.sw.query(retangle, found)
-                self.se.query(retangle, found)
+        
+        for p in self.points:
+            if retangle.contains(p):
+                found.append(p)
+            
+        if self.divided:
+            self.nw.query(retangle, found)
+            self.ne.query(retangle, found)
+            self.sw.query(retangle, found)
+            self.se.query(retangle, found)
             
 def randomic(boundary):
     randx = randint(boundary.pos.x - boundary.size.x, boundary.pos.x + boundary.size.x)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on 20191114
-Update on 20200201
+Update on 20200202
 @author: Eduardo Pagotto
  '''
 
@@ -106,34 +106,35 @@ class Octree(object):
         if (A and B) or (A and C):
             self.points.append(point)
             return True
-        else:
-            if self.divided is False:
-                self.subdivide()
-                
-            if self.leafyMode is True:
-                for p in self.points:
-                    self.__insert_new(p)
-                    self.points = []
     
-            self.__insert_new(point)
+        if self.divided is False:
+            self.subdivide()
+            
+        if self.leafyMode is True:
+            for p in self.points:
+                self.__insert_new(p)
+                
+            self.points = []
+
+        self.__insert_new(point)
 
     def query(self, aabb, found):
         if not self.boundary.intersects(aabb):
             return
-        else:
-            for p in self.points:
-                if aabb.contains(p):
-                    found.append(p)
-                
-            if self.divided:
-                self.tnw.query(aabb, found)
-                self.tne.query(aabb, found)
-                self.tsw.query(aabb, found)
-                self.tse.query(aabb, found)
-                self.bnw.query(aabb, found)
-                self.bne.query(aabb, found)
-                self.bsw.query(aabb, found)
-                self.bse.query(aabb, found)
+        
+        for p in self.points:
+            if aabb.contains(p):
+                found.append(p)
+            
+        if self.divided:
+            self.tnw.query(aabb, found)
+            self.tne.query(aabb, found)
+            self.tsw.query(aabb, found)
+            self.tse.query(aabb, found)
+            self.bnw.query(aabb, found)
+            self.bne.query(aabb, found)
+            self.bsw.query(aabb, found)
+            self.bse.query(aabb, found)
             
 def randomic(boundary):
     randx = randint(boundary.min.x, boundary.max.x)
