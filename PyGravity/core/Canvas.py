@@ -49,3 +49,20 @@ class Canvas(object):
         #gl.glEnable(gl.GL_CULL_FACE)
         #gl.glEnable(gl.GL_BLEND)
         #gl.glClearColor(0.3, 0.3, 0.3, 1.0)
+
+    def initGL(self):
+        gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+        gl.glEnable(gl.GL_DEPTH_TEST)
+        gl.glEnable(gl.GL_CULL_FACE)
+        gl.glEnable(gl.GL_BLEND)
+
+    def destroy(self):
+        sdl2.SDL_GL_DeleteContext(self.glcontext)
+        sdl2.SDL_DestroyWindow(self.window)
+
+    def before(self):
+        gl.glClearColor(0, 0, 0, 1)
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
+
+    def after(self):
+        sdl2.SDL_GL_SwapWindow(self.window)

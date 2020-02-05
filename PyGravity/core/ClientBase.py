@@ -16,16 +16,21 @@ class ClientBase(IClient):
         self.pause = False
 
     def start(self):
-        return
+        self.canvas.initGL()
 
     def stop(self):
-        return
+        self.canvas.destroy()
 
     def render(self):
         #self.canvas.before()
         # TODO desenhar aqui!!
+
+        self.canvas.before()
+
         sdl2.SDL_Delay(ctypes.c_uint(5))
 
+
+        self.canvas.after()
         #self.canvas.after()
 
     def keyCapture(self, tecla):

@@ -13,20 +13,9 @@ class FlowControl(object):
         self.client = client
         self.currentFPS = 0
 
-    def __del__(self):
-        sdl2.SDL_Quit()
-
-    def open(self):
         #joystickManager.Initialize()
         #joystickManager.FindJoysticks()
         self.client.start()
-
-    def close(self):
-        #joystickManager.ReleaseJoysticks()
-        event = sdl2.SDL_Event()
-        event.type = sdl2.SDL_QUIT
-        if sdl2.SDL_PushEvent(event) == -1:
-            raise Exception(sdl2.SDL_GetError().decode())
 
     def __execute(self):
         try:

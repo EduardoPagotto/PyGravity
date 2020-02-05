@@ -18,11 +18,10 @@ if __name__ == '__main__':
     sdl2.SDL_Log(b"App Iniciado")
 
     canvas = Canvas("teste", 640, 480)
-    
+
     client = ClientBase(canvas)
 
     flow = FlowControl(client)
-    flow.open()
     flow.loop()
 
     sdl2.SDL_Log(b"App Finalizado")
