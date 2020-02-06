@@ -1,6 +1,7 @@
 #version 330
-out vec4 FragColor;
+smooth in vec4 theColour;
+out vec4 outputColour;
 void main()
 {
-    FragColor = vec4(1, 1, 1, 1);
+    outputColour = theColour;
 }
