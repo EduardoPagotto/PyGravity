@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
-Created on 20200131
-Update on 20200131
+Created on 20200206
+Update on 20200206
 @author: Eduardo Pagotto
 '''
 
@@ -10,13 +10,19 @@ import sdl2
 
 from PyGravity.core.IClient import IClient
 
-class ClientBase(IClient):
+from Triangle import Triangle
+
+class Game(IClient):
     def __init__(self, canvas):
         self.canvas = canvas
         self.pause = False
 
+        self.triangle = Triangle()
+
     def start(self):
         self.canvas.initGL()
+
+        self.triangle.initialize()
 
     def stop(self):
         self.canvas.destroy()
@@ -25,8 +31,9 @@ class ClientBase(IClient):
         self.canvas.before()
 
         # TODO desenhar aqui!!
-        sdl2.SDL_Delay(ctypes.c_uint(5))
-        
+        # sdl2.SDL_Delay(ctypes.c_uint(5))
+        self.triangle.draw()
+
         self.canvas.after()
 
 

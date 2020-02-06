@@ -9,7 +9,8 @@ import sdl2
 
 from PyGravity.core.Canvas import Canvas
 from PyGravity.core.FlowControl import FlowControl
-from PyGravity.core.ClientBase import ClientBase
+#from PyGravity.core.ClientBase import ClientBase
+from Game import Game
 
 if __name__ == '__main__':
 
@@ -18,7 +19,7 @@ if __name__ == '__main__':
 
     canvas = Canvas("teste", 640, 480)
 
-    client = ClientBase(canvas)
+    client = Game(canvas)
 
     flow = FlowControl(client)
     flow.loop()

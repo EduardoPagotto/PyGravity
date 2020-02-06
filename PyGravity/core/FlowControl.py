@@ -24,8 +24,9 @@ class FlowControl(object):
         try:
             #self.countFrame()
             self.client.render()
-            self.client.joystickStatus(joystickManager)
-        except:
+            self.client.joystickStatus(self.joystickManager)
+        except Exception as exp:
+            sdl2.SDL_LogError(sdl2.SDL_LOG_CATEGORY_RENDER, str(exp).encode())
             sdl2.SDL_Quit()
 
     def loop(self):

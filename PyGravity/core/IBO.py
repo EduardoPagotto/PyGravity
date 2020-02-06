@@ -22,7 +22,7 @@ class IBO:
     def unbind(self) -> None:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
 
-    def set_indices(self, stride: int, bytelength: int, data: Any) -> None:
+    def set_indices(self, stride: int, bytelength: int, data) -> None:
         self.index_count = bytelength // stride
         self.bind()
         if stride == 1:

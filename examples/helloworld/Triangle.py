@@ -58,8 +58,6 @@ class Triangle:
             self.ibo.set_indices(4, 12, struct.pack("3I", *self.indices))
 
     def draw(self) -> None:
-        if not self.vbo:
-            self.initialize()
         self.shader.use()
         self.vbo.set_slot(0)
         self.ibo.bind()
