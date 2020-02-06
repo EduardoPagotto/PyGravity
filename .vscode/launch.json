@@ -16,15 +16,6 @@
             "args": []
         },
         {
-            "name": "Python",
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": true,
-            "pythonPath": "${config:python.pythonPath}",
-            "program": "${file}",
-
-        },
-        {
             "name": "Integrated Terminal/Console",
             "type": "python",
             "request": "launch",

@@ -13,19 +13,19 @@ class JoystickManager(object):
         self.initialized = False
 
     def __del__(self):
-        if self.Initialized is True:
+        if self.initialized is True:
             self.ReleaseJoysticks()
             sdl2.SDL_JoystickEventState(sdl2.SDL_DISABLE)
             sdl2.SDL_QuitSubSystem(sdl2.SDL_INIT_JOYSTICK)
     
-        self.Initialized = False
+        self.initialized = False
 
     def Initialize(self):
         if not self.initialized:
             sdl2.SDL_InitSubSystem(sdl2.SDL_INIT_JOYSTICK)
             sdl2.SDL_JoystickEventState(sdl2.SDL_ENABLE)
 
-        self.Initialized = True
+        self.initialized = True
 
     def ReleaseJoysticks(self):
 
@@ -63,3 +63,21 @@ class JoystickManager(object):
         return None
 
     
+    def TrackEvent(self, event):
+        id = 255
+        if event.type ==  sdl2.SDL_JOYAXISMOTION:
+            id = event.jaxis.which
+        if event.type ==  sdl2.SDL_JOYBUTTONDOWN or event.type ==  sdl2.SDL_JOYBUTTONUP:
+            id = event.jbutton.which
+        if event.type ==  sdl2.SDL_JOYHATMOTION:
+            id = event.jhat.which
+        if event.type ==  sdl2.SDL_JOYBALLMOTION:
+            id = event.jball.which
+        if event.type ==  sdl2.SDL_JOYDEVICEADDED or event.type ==  sdl2.SDL_JOYDEVICEREMOVED:
+            self.FindJoysticks()
+        else:
+            return False
+    
+        self.Joysticks[id].id = id
+        self.Joysticks[id].TrackEvent(event)
+        return True

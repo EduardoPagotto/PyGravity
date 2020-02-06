@@ -5,12 +5,11 @@ Update on 20200131
 @author: Eduardo Pagotto
  '''
 
+import sdl2
+
 from PyGravity.core.Canvas import Canvas
 from PyGravity.core.FlowControl import FlowControl
-#from PyGravity.core.IClient import IClient
 from PyGravity.core.ClientBase import ClientBase
-
-import sdl2
 
 if __name__ == '__main__':
 

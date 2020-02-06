@@ -8,20 +8,23 @@ Update on 20200131
 import ctypes
 import sdl2
 
+from PyGravity.core.JoystickManager import JoystickManager
+
 class FlowControl(object):
     def __init__(self, client):
         self.client = client
         self.currentFPS = 0
 
-        #joystickManager.Initialize()
-        #joystickManager.FindJoysticks()
+        self.joystickManager = JoystickManager()
+        self.joystickManager.Initialize()
+        self.joystickManager.FindJoysticks()
         self.client.start()
 
     def __execute(self):
         try:
             #self.countFrame()
             self.client.render()
-            #self.client.joystickStatus(joystickManager)
+            self.client.joystickStatus(joystickManager)
         except:
             sdl2.SDL_Quit()
 
@@ -64,8 +67,8 @@ class FlowControl(object):
                     self.client.windowEvent(event)
 
                 else:
-                    # if joystickManager.TrackEvent(event) is True:
-                    #     self.client.joystickCapture(joystickManager)
+                    if self.joystickManager.TrackEvent(event) is True:
+                        self.client.joystickCapture(self.joystickManager)
                     pass
 
             if self.client.paused() is False:

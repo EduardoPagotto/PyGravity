@@ -3,9 +3,9 @@ HOST=127.0.0.1
 TEST_PATH=./
 
 clean-pyc:
-	find . -name '*.pyc' -exec rm --force {} +
-	find . -name '*.pyo' -exec rm --force {} +
-   name '*~' -exec rm --force  {} 
+	find . -name "*.pyc" -exec rm -f {} \;
+	find . -name "*.pyo" -exec rm -f {} \;
+	find . -type d -name "__pycache__" -delete 
 
 clean-build:
 	rm --force --recursive build/
