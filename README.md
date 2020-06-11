@@ -3,7 +3,7 @@ Implementacao de corpos n to n com forca gravitacional<p>
 *OBS: bidimencional*
 
 ### Deps install:
-```bash 
+```bash
 pip3 install PyOpengl PyGLM
 ```
 

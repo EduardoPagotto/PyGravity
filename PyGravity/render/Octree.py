@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on 20191114
-Update on 20200202
+Update on 20200611
 @author: Eduardo Pagotto
  '''
 
@@ -51,7 +51,7 @@ class Octree(object):
         tnw = AABB(glm.vec3(xmin, ymax, zmax), s)
         tsw = AABB(glm.vec3(xmin, ymax, zmin), s)
         tse = AABB(glm.vec3(xmax, ymax, zmin), s)
-        
+
         bne = AABB(glm.vec3(xmax, ymin, zmax), s)
         bnw = AABB(glm.vec3(xmin, ymin, zmax), s)
         bsw = AABB(glm.vec3(xmin, ymin, zmin), s)
@@ -67,7 +67,6 @@ class Octree(object):
         self.bsw = Octree(bsw, self.capacity, self.leafyMode, new_deep)
         self.bse = Octree(bse, self.capacity, self.leafyMode, new_deep)
 
-        
     def __insert_new(self, point):
         if self.tne.insert(point):
             return True
@@ -106,14 +105,14 @@ class Octree(object):
         if (A and B) or (A and C):
             self.points.append(point)
             return True
-    
+
         if self.divided is False:
             self.subdivide()
-            
+
         if self.leafyMode is True:
             for p in self.points:
                 self.__insert_new(p)
-                
+
             self.points = []
 
         self.__insert_new(point)
@@ -121,11 +120,11 @@ class Octree(object):
     def query(self, aabb, found):
         if not self.boundary.intersects(aabb):
             return
-        
+
         for p in self.points:
             if aabb.contains(p):
                 found.append(p)
-            
+
         if self.divided:
             self.tnw.query(aabb, found)
             self.tne.query(aabb, found)
@@ -135,7 +134,7 @@ class Octree(object):
             self.bne.query(aabb, found)
             self.bsw.query(aabb, found)
             self.bse.query(aabb, found)
-            
+
 def randomic(boundary):
     randx = randint(boundary.min.x, boundary.max.x)
     randy = randint(boundary.min.y, boundary.max.y)

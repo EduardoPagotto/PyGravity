@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on 20200130
-Update on 20200130
+Update on 20200611
 @author: Eduardo Pagotto
  '''
 
@@ -11,7 +11,7 @@ class Rectangle(object):
         self.size = size
         self.max = pos + size
         self.min = pos - size
-        
+
     def __str__(self):
         return 'pos:{0}, y:{1}, w:{2}, h:{3}'.format(self.pos.x, self.pos.y, self.size.x, self.size.y)
 
@@ -26,4 +26,3 @@ class Rectangle(object):
                     retangle.max.x < self.min.x or
                     retangle.min.y > self.max.y or
                     retangle.max.y < self.min.y)
-    

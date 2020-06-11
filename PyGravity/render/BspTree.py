@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 '''
 Created on 20200210
-Update on 20200210
+Update on 20200611
 @author: Eduardo Pagotto
  '''
 
 import math
 import glm
 from enum import Enum
-from dataclasses import dataclass 
+from dataclasses import dataclass
 
 from PyGravity.render.Triangle import Triangle
 
@@ -17,7 +17,7 @@ EPSILON=1e-3
 class SIDE(Enum):
     CP_ONPLANE = 0,
     CP_FRONT = 1,
-    CP_BACK = 2, 
+    CP_BACK = 2,
     CP_SPANNING = 3
 
 @dataclass
@@ -99,7 +99,7 @@ def splitTriangle(fx: glm.vec3, _pTriangle: Triangle, _partition: Triangle , _pL
         pVertex_a = _pTriangle.vertex[0] # old a
         pVertex_b = _pTriangle.vertex[1] # old b
         pVertex_c = _pTriangle.vertex[2] # old c
-    
+
     # Testar ideia
     # Na textura se Xb - Xa > 0 entao Xb e [1,n] do contrario [0,n] para segmento de reta ab
     # Na textura se Yb - Ya > 0 entao Yb e [n,1] do contrario [n,0] para segmento de reta ab
@@ -147,7 +147,7 @@ def splitTriangle(fx: glm.vec3, _pTriangle: Triangle, _partition: Triangle , _pL
         T1.vertex[i].normal = _pTriangle.vertex[i].normal
         T2.vertex[i].normal = _pTriangle.vertex[i].normal
         T3.vertex[i].normal = _pTriangle.vertex[i].normal
-    
+
     _pListPolygon.insert(0, T1)
     _pListPolygon.insert(0, T2)
     _pListPolygon.insert(0, T3)
@@ -171,7 +171,7 @@ def classifyPoly(plane: Triangle, poly: Triangle, _resultTest: glm.vec3) -> SIDE
             onPlane += 1
             infront += 1
             behind += 1
-        
+
     _resultTest.x = result[0]
     _resultTest.y = result[1]
     _resultTest.z = result[2]
@@ -202,7 +202,7 @@ def bsptreeBuild(_pListPolygon) -> BspTreeNode:
         poly = _pListPolygon.pop()
 
         result = glm.vec3(0.0)
-        
+
         teste = classifyPoly(tree.partition, poly, result)
 
         if (teste == SIDE.CP_BACK):

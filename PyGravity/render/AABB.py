@@ -1,19 +1,29 @@
 #!/usr/bin/env python3
 '''
 Created on 20200130
-Update on 20200130
+Update on 20200611
 @author: Eduardo Pagotto
  '''
 
 import glm
 
 class AABB(object):
-    def __init__(self, pos, size):
+    def __init__(self, pos:glm.vec3, size:glm.vec3):
         self.pos = pos
         self.size = size
         self.max = self.pos + self.size
         self.min = self.pos - self.size
         self.surfaceArea = 2.0 * (self.size.x * self.size.y + self.size.x * self.size.z + self.size.y * self.size.z)
+
+        self.vertex = [glm.vec3(self.min.x, self.min.y, self.min.z),
+                       glm.vec3(self.max.x, self.min.y, self.min.z),
+                       glm.vec3(self.min.x, self.max.y, self.min.z),
+                       glm.vec3(self.max.x, self.max.y, self.min.z),
+                       glm.vec3(self.min.x, self.min.y, self.max.z),
+                       glm.vec3(self.max.x, self.min.y, self.max.z),
+                       glm.vec3(self.min.x, self.max.y, self.max.z),
+                       glm.vec3(self.max.x, self.max.y, self.max.z)]
+
 
     def _v3(self, val):
         return '({0:.2f} {1:.2f} {2:.2f})'.format(val.x, val.y, val.z)
@@ -36,7 +46,7 @@ class AABB(object):
                 other.max.y < self.min.y or
                 other.min.z > self.max.z or
                 other.max.z < self.min.z)
-                
+
     def containsAABB(self, other):
         return (other.min.x >= self.min.x and
                 other.max.x <= self.max.x and
@@ -45,7 +55,7 @@ class AABB(object):
                 other.min.z >= self.min.z and
                 other.max.z <= self.max.z)
 
-    def overlapsAABB(self, other): 
+    def overlapsAABB(self, other):
         return (self.max.x > other.min.x and
                 self.min.x < other.max.x and
                 self.max.y > other.min.y and

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on 20191109
-Update on 20200201
+Update on 20200611
 @author: Eduardo Pagotto
  '''
 
@@ -74,10 +74,10 @@ class QuadTree(object):
         if (A and B) or (A and C):
             self.points.append(point)
             return True
-    
+
         if self.divided is False:
             self.subdivide()
-                
+
         if self.leafyMode is True:
             for p in self.points:
                 self.__insert_new(p)
@@ -89,17 +89,17 @@ class QuadTree(object):
     def query(self, retangle, found):
         if not self.boundary.intersects(retangle):
             return
-        
+
         for p in self.points:
             if retangle.contains(p):
                 found.append(p)
-            
+
         if self.divided:
             self.nw.query(retangle, found)
             self.ne.query(retangle, found)
             self.sw.query(retangle, found)
             self.se.query(retangle, found)
-            
+
 def randomic(boundary):
     randx = randint(boundary.pos.x - boundary.size.x, boundary.pos.x + boundary.size.x)
     randy = randint(boundary.pos.x - boundary.size.x, boundary.pos.y + boundary.size.y)
