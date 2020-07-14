@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on 20200611
-Update on 20200611
+Update on 20200714
 @author: Eduardo Pagotto
  '''
 
@@ -9,10 +9,10 @@ import glm
 
 class Plane(object):
     def __init__(self):
-        self.point = None
-        self.normal = None
-        self.ND = 0.0
-        self.O = 0
+        self.point:glm.vec3 = glm.vec3(0.0)
+        self.normal:glm.vec3 = glm.vec3(0.0)
+        self.ND:float = 0.0
+        self.O:float = 0
 
     def set_values(self, a:glm.vec3, b:glm.vec3, c:glm.vec3):
         self.point = a
@@ -31,12 +31,12 @@ class Plane(object):
 
         self.O = cy1 if self.normal.z < 0.0 else cy2
 
-    def AABB_Behind(self, AABBVertices):
+    def AABB_Behind(self, AABBVertices) -> bool:
         val = glm.dot(self.normal, AABBVertices[self.O])
         val2 = val < self.ND
         return val2
 
-    def AABB_Distance(self, AABBVertices):
+    def AABB_Distance(self, AABBVertices) -> bool:
         val = glm.dot(self.normal, AABBVertices[self.O])
         return val
 

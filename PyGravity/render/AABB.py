@@ -1,37 +1,39 @@
 #!/usr/bin/env python3
 '''
 Created on 20200130
-Update on 20200611
+Update on 20200714
 @author: Eduardo Pagotto
  '''
+
+from typing import List
 
 import glm
 
 class AABB(object):
     def __init__(self, pos:glm.vec3, size:glm.vec3):
-        self.pos = pos
-        self.size = size
-        self.max = self.pos + self.size
-        self.min = self.pos - self.size
-        self.surfaceArea = 2.0 * (self.size.x * self.size.y + self.size.x * self.size.z + self.size.y * self.size.z)
+        self.pos:glm.vec3 = pos
+        self.size:glm.vec3 = size
+        self.max:glm.vec3 = self.pos + self.size
+        self.min:glm.vec3 = self.pos - self.size
+        self.surfaceArea:float = 2.0 * (self.size.x * self.size.y + self.size.x * self.size.z + self.size.y * self.size.z)
 
-        self.vertex = [glm.vec3(self.min.x, self.min.y, self.min.z),
-                       glm.vec3(self.max.x, self.min.y, self.min.z),
-                       glm.vec3(self.min.x, self.max.y, self.min.z),
-                       glm.vec3(self.max.x, self.max.y, self.min.z),
-                       glm.vec3(self.min.x, self.min.y, self.max.z),
-                       glm.vec3(self.max.x, self.min.y, self.max.z),
-                       glm.vec3(self.min.x, self.max.y, self.max.z),
-                       glm.vec3(self.max.x, self.max.y, self.max.z)]
+        self.vertex:List[glm.vec3] = [glm.vec3(self.min.x, self.min.y, self.min.z),
+                                      glm.vec3(self.max.x, self.min.y, self.min.z),
+                                      glm.vec3(self.min.x, self.max.y, self.min.z),
+                                      glm.vec3(self.max.x, self.max.y, self.min.z),
+                                      glm.vec3(self.min.x, self.min.y, self.max.z),
+                                      glm.vec3(self.max.x, self.min.y, self.max.z),
+                                      glm.vec3(self.min.x, self.max.y, self.max.z),
+                                      glm.vec3(self.max.x, self.max.y, self.max.z)]
 
 
-    def _v3(self, val):
+    def _v3(self, val:glm.vec3) -> str:
         return '({0:.2f} {1:.2f} {2:.2f})'.format(val.x, val.y, val.z)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return 'p:{0} s:{1}'.format(self._v3(self.pos), self._v3(self.size))
 
-    def contains(self, point):
+    def contains(self, point:glm.vec3) -> bool:
         return (point.x >= self.min.x and
                 point.x < self.max.x and
                 point.y >= self.min.y and
@@ -39,7 +41,7 @@ class AABB(object):
                 point.z >= self.min.z and
                 point.z < self.max.z)
 
-    def intersects(self, other):
+    def intersects(self, other:'AABB') -> bool:
         return (other.min.x > self.max.x or
                 other.max.x < self.min.x or
                 other.min.y > self.max.y or
@@ -47,7 +49,7 @@ class AABB(object):
                 other.min.z > self.max.z or
                 other.max.z < self.min.z)
 
-    def containsAABB(self, other):
+    def containsAABB(self, other:'AABB') -> bool:
         return (other.min.x >= self.min.x and
                 other.max.x <= self.max.x and
                 other.min.y >= self.min.y and
@@ -55,7 +57,7 @@ class AABB(object):
                 other.min.z >= self.min.z and
                 other.max.z <= self.max.z)
 
-    def overlapsAABB(self, other):
+    def overlapsAABB(self, other:'AABB') -> bool:
         return (self.max.x > other.min.x and
                 self.min.x < other.max.x and
                 self.max.y > other.min.y and

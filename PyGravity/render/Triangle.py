@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 '''
 Created on 20200210
-Update on 20200611
+Update on 20200714
 @author: Eduardo Pagotto
  '''
 
+from typing import List
 import glm
 from PyGravity.core.VertexData import VertexData
 
 class Triangle(object):
-    def __init__(self, a : glm.vec3, b : glm.vec3, c : glm.vec3):
-        self.vertex = []
+    def __init__(self, a:glm.vec3, b:glm.vec3, c:glm.vec3):
+        self.vertex:List[VertexData] = []
 
         va = VertexData()
         va.position = a

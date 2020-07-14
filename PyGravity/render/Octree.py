@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 '''
 Created on 20191114
-Update on 20200611
+Update on 20200714
 @author: Eduardo Pagotto
  '''
+
+from typing import List, Any, Union
 
 import glm
 
@@ -11,26 +13,26 @@ from random import seed
 from random import randint
 
 #from PyGravity.render.AABB import AABB
-from AABB import AABB
+from .AABB import AABB
 
 class Octree(object):
-    def __init__(self, boundary, capacity, leafyMode=False, deep=0):
-        self.boundary = boundary
-        self.capacity = capacity
-        self.leafyMode = leafyMode
-        self.deep = deep
-        self.points = []
-        self.divided = False
-        self.tnw = None
-        self.tne = None
-        self.tsw = None
-        self.tse = None
-        self.bnw = None
-        self.bne = None
-        self.bsw = None
-        self.bse = None
+    def __init__(self, boundary:AABB, capacity:int, leafyMode:bool=False, deep:int=0):
+        self.boundary:AABB = boundary
+        self.capacity:int = capacity
+        self.leafyMode:bool = leafyMode
+        self.deep:int = deep
+        self.points:List[glm.vec3] = []
+        self.divided:bool = False
+        self.tnw: Union['Octree', Any] = None
+        self.tne: Union['Octree', Any] = None
+        self.tsw: Union['Octree', Any] = None
+        self.tse: Union['Octree', Any] = None
+        self.bnw: Union['Octree', Any] = None
+        self.bne: Union['Octree', Any] = None
+        self.bsw: Union['Octree', Any] = None
+        self.bse: Union['Octree', Any] = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return 'boundery:{0}'.format(self.boundary)
 
     def subdivide(self):
@@ -67,7 +69,7 @@ class Octree(object):
         self.bsw = Octree(bsw, self.capacity, self.leafyMode, new_deep)
         self.bse = Octree(bse, self.capacity, self.leafyMode, new_deep)
 
-    def __insert_new(self, point):
+    def __insert_new(self, point) -> bool:
         if self.tne.insert(point):
             return True
 
@@ -92,7 +94,9 @@ class Octree(object):
         if self.bsw.insert(point):
             return True
 
-    def insert(self, point):
+        return False
+
+    def insert(self, point) -> bool:
 
         if self.boundary.contains(point) is not True:
             return False
@@ -115,9 +119,9 @@ class Octree(object):
 
             self.points = []
 
-        self.__insert_new(point)
+        return self.__insert_new(point)
 
-    def query(self, aabb, found):
+    def query(self, aabb:AABB, found:glm.vec3):
         if not self.boundary.intersects(aabb):
             return
 

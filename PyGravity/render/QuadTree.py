@@ -1,31 +1,33 @@
 #!/usr/bin/env python3
 '''
 Created on 20191109
-Update on 20200611
+Update on 20200714
 @author: Eduardo Pagotto
  '''
 
+from typing import Any, List, Union
 import glm
 from random import seed
 from random import randint
 
 #from PyGravity.render.Rectangle import Rectangle
-from Rectangle import Rectangle
+from .Rectangle import Rectangle
 
 class QuadTree(object):
-    def __init__(self, boundary, capacity, leafyMode=False, deep=0):
-        self.boundary = boundary
-        self.capacity = capacity
-        self.leafyMode = leafyMode
-        self.deep = deep
-        self.points = []
-        self.divided = False
-        self.nw = None
-        self.ne = None
-        self.sw = None
-        self.se = None
+    def __init__(self, boundary:Rectangle, capacity:int, leafyMode:bool=False, deep:int=0):
+        self.boundary:Rectangle = boundary
+        self.capacity:int = capacity
+        self.leafyMode:bool = leafyMode
+        self.deep:int = deep
+        self.points:List[glm.vec2] = []
+        self.divided:bool = False
 
-    def __str__(self):
+        self.nw: Union['QuadTree', Any] = None
+        self.ne: Union['QuadTree', Any] = None
+        self.sw: Union['QuadTree', Any] = None
+        self.se: Union['QuadTree', Any] = None
+
+    def __str__(self) -> str:
         return 'boundery:{0}'.format(self.boundary)
 
     def subdivide(self):
@@ -47,7 +49,7 @@ class QuadTree(object):
         self.se = QuadTree(se, self.capacity, self.leafyMode, new_deep)
         self.sw = QuadTree(sw, self.capacity, self.leafyMode, new_deep)
 
-    def __insert_new(self, point):
+    def __insert_new(self, point:glm.vec2) -> bool:
         if self.ne.insert(point):
             return True
 
@@ -60,8 +62,10 @@ class QuadTree(object):
         if self.sw.insert(point):
             return True
 
+        return False
 
-    def insert(self, point):
+
+    def insert(self, point:glm.vec2) -> bool:
 
         if self.boundary.contains(point) is not True:
             return False
@@ -86,7 +90,7 @@ class QuadTree(object):
 
         return self.__insert_new(point)
 
-    def query(self, retangle, found):
+    def query(self, retangle:Rectangle, found:glm.vec2):
         if not self.boundary.intersects(retangle):
             return
 
