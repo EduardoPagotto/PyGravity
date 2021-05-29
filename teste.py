@@ -10,6 +10,8 @@ import glm
 from PyGravity.render.AABB import AABB
 from PyGravity.render.Plane import Plane
 
+from PyGravity.render.Frustum import Frustum
+
 # class Tris(object):
 #     def __init__(self, a:glm.vec3, b:glm.vec3, c:glm.vec3):
 #         self.vertex = [a, b, c]
@@ -26,12 +28,16 @@ if __name__ == "__main__":
     plane = Plane()
     plane.set_values(Va, Vb, Vc)
 
-
     atras = plane.AABB_Behind(aabb.vertex)
     distancia = plane.AABB_Distance(aabb.vertex)
 
     print('Contem:{0}, Distancia:{1}'.format(atras, distancia))
 
+    identidade = glm.mat4(1.0)
+
+    frustum = Frustum(identidade)
+    val = frustum.AABBVisible(aabb.vertex)
+    dis = frustum.AABBDistance(aabb.vertex)
 
 
-
+    print('f ')

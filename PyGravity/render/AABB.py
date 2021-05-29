@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 '''
 Created on 20200130
-Update on 20200714
+Update on 20210529
 @author: Eduardo Pagotto
  '''
 
 from typing import List
 
 import glm
+
+from OpenGL.GL import * 
+
+from PyGravity.render.Frustum import Frustum
 
 class AABB(object):
     def __init__(self, pos:glm.vec3, size:glm.vec3):
@@ -64,6 +68,45 @@ class AABB(object):
                 self.min.y < other.max.y and
                 self.max.z > other.min.z and
                 self.min.z < other.max.z)
+
+    def visible(self, frustum: Frustum) -> bool:
+        return frustum.AABBVisible(self.vertex)
+
+    def distance(self, frustum: Frustum) -> float:
+        return frustum.AABBDistance(self.vertex)
+
+    def render(self):
+        glBegin(GL_LINES)
+
+        glVertex3fv(glm.value_ptr(self.vertex[0]))
+        glVertex3fv(glm.value_ptr(self.vertex[1]))
+        glVertex3fv(glm.value_ptr(self.vertex[2]))
+        glVertex3fv(glm.value_ptr(self.vertex[3]))
+        glVertex3fv(glm.value_ptr(self.vertex[4]))
+        glVertex3fv(glm.value_ptr(self.vertex[5]))
+        glVertex3fv(glm.value_ptr(self.vertex[6]))
+        glVertex3fv(glm.value_ptr(self.vertex[7]))
+
+        glVertex3fv(glm.value_ptr(self.vertex[0]))
+        glVertex3fv(glm.value_ptr(self.vertex[2]))
+        glVertex3fv(glm.value_ptr(self.vertex[1]))
+        glVertex3fv(glm.value_ptr(self.vertex[3]))
+        glVertex3fv(glm.value_ptr(self.vertex[4]))
+        glVertex3fv(glm.value_ptr(self.vertex[6]))
+        glVertex3fv(glm.value_ptr(self.vertex[5]))
+        glVertex3fv(glm.value_ptr(self.vertex[7]))
+
+        glVertex3fv(glm.value_ptr(self.vertex[0]))
+        glVertex3fv(glm.value_ptr(self.vertex[4]))
+        glVertex3fv(glm.value_ptr(self.vertex[1]))
+        glVertex3fv(glm.value_ptr(self.vertex[5]))
+        glVertex3fv(glm.value_ptr(self.vertex[2]))
+        glVertex3fv(glm.value_ptr(self.vertex[6]))
+        glVertex3fv(glm.value_ptr(self.vertex[3]))
+        glVertex3fv(glm.value_ptr(self.vertex[7]))
+
+        glEnd()
+
 
     # def merge(self, other):
     #     return AABB(glm.min(self.min, other.min), glm.max(self.max, other.max))
