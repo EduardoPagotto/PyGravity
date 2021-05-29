@@ -17,21 +17,20 @@ from PyGravity.render.Plane import Plane
 
 if __name__ == "__main__":
 
-
     aabb = AABB(glm.vec3(0.0, 0.0, 0.0), glm.vec3(10.0, 10.0, 10.0))
 
-    Vc = glm.vec3(-5.0, -20.0, -5.0)
-    Vb = glm.vec3(5.0, -20.0, -5.0)
     Va = glm.vec3(5.0, -20.0, 5.0)
+    Vb = glm.vec3(5.0, -20.0, -5.0)
+    Vc = glm.vec3(-5.0, -20.0, -5.0)
 
     plane = Plane()
     plane.set_values(Va, Vb, Vc)
 
 
-    contem = plane.AABB_Behind(aabb.vertex)
+    atras = plane.AABB_Behind(aabb.vertex)
     distancia = plane.AABB_Distance(aabb.vertex)
 
-    print('Contem:{0}, Distancia:{1}'.format(contem, distancia))
+    print('Contem:{0}, Distancia:{1}'.format(atras, distancia))
 
 
 
